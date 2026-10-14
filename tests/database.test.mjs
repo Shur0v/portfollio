@@ -1,0 +1,61 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { mkdtemp, mkdir, readFile, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { randomBytes } from "node:crypto";
+import { createServer } from "node:net";
+import path from "node:path";
+import pg from "pg";
+import { startPostgres } from "../scripts/portable-postgres.mjs";
+import { setupDatabase } from "../scripts/database-setup.mjs";
+
+test("PostgreSQL migration is atomic, imports JSON once, enforces indexes, and survives restart", { timeout: 180000 }, async () => {
+  const temporary = await mkdtemp(path.join(tmpdir(), "portfolio-pg-migration-"));
+  const directory = path.join(temporary, "cluster");
+  const legacy = path.join(temporary, "legacy");
+  await mkdir(legacy);
+  const listener = createServer();
+  await new Promise(resolve => listener.listen(0, "127.0.0.1", resolve));
+  const port = listener.address().port;
+  await new Promise(resolve => listener.close(resolve));
+  const password = randomBytes(32).toString("hex");
+  const options = { directory, port, user: "portfolio", password, temporary: true };
+  const connectionString = `postgresql://portfolio:${password}@127.0.0.1:${port}/postgres`;
+  let stop = await startPostgres(options);
+  let client = new pg.Client({ connectionString });
+  try {
+    await client.connect();
+    const seed = JSON.parse(await readFile(new URL("../data/projects.seed.json", import.meta.url), "utf8"));
+    const project = { ...seed[0], title: "Imported legacy project — বাংলা 🎨" };
+    const message = { id: "70e5ecb6-8870-4e88-b1b9-c213424818bd", date: "2026-10-11T12:00:00Z", name: "Legacy visitor", email: "visitor@example.com", subject: "Imported", message: "Preserve this message." };
+    await writeFile(path.join(legacy, "projects.json"), JSON.stringify([project]));
+    await writeFile(path.join(legacy, "messages.json"), JSON.stringify([{ ...message, id: "invalid-uuid" }]));
+    await assert.rejects(setupDatabase(connectionString, legacy));
+    assert.equal((await client.query("SELECT to_regclass('portfolio_projects') AS name")).rows[0].name, null);
+    await writeFile(path.join(legacy, "messages.json"), JSON.stringify([message]));
+    assert.deepEqual(await setupDatabase(connectionString, legacy), { initialized: true, projects: 1, messages: 1 });
+    assert.equal((await client.query("SELECT payload FROM portfolio_projects")).rows[0].payload.title, project.title);
+    assert.equal((await client.query("SELECT message FROM portfolio_messages")).rows[0].message, message.message);
+    const repeated = await Promise.all([setupDatabase(connectionString, legacy), setupDatabase(connectionString, legacy)]);
+    assert.ok(repeated.every(result => result.initialized === false));
+    const indexes = await client.query("SELECT indexname FROM pg_indexes WHERE tablename IN ('portfolio_projects', 'portfolio_messages')");
+    assert.ok(indexes.rows.some(row => row.indexname === "portfolio_projects_published_order_idx"));
+    assert.ok(indexes.rows.some(row => row.indexname === "portfolio_messages_date_idx"));
+    await assert.rejects(client.query("INSERT INTO portfolio_projects (id, payload) VALUES ($1, $2)", ["duplicate-project", JSON.stringify({ ...project, id: "duplicate-project" })]), error => error.code === "23505");
+    await client.query("DELETE FROM portfolio_projects WHERE id = $1", [project.id]);
+    await setupDatabase(connectionString, legacy);
+    assert.equal((await client.query("SELECT count(*) FROM portfolio_projects")).rows[0].count, "0");
+    await client.end();
+    client = null;
+    await stop();
+    stop = null;
+    stop = await startPostgres(options);
+    client = new pg.Client({ connectionString });
+    await client.connect();
+    assert.equal((await client.query("SELECT count(*) FROM portfolio_projects")).rows[0].count, "0");
+    assert.equal((await client.query("SELECT count(*) FROM portfolio_messages")).rows[0].count, "1");
+  } finally {
+    if (client) await client.end();
+    if (stop) await stop();
+  }
+});
