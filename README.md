@@ -207,7 +207,7 @@ Rechecked on October 18, 2026: TypeScript checking, production build, the Postgr
 
 For deployment on the existing multi-project VPS, see `deploy/README.md`. The templates are isolated additions, not a claim that the VPS is already deployed. SSH access, the domain's corrected DNS record, a free app port, existing proxy configuration checks, and HTTPS verification are required first.
 
-For the already-running `/var/www/shurov` installation, follow `deploy/UPGRADE-CMS.md`. Build a separate candidate, back up PostgreSQL/private settings/uploads, run the additive migrations, and switch only the portfolio service. Local implementation or a GitHub push does not update the running VPS by itself.
+For the already-running `/var/www/shurov` installation, follow `deploy/UPGRADE-CMS.md`. Its one-command updater, `deploy/update-vps.sh`, builds a separate candidate, backs up PostgreSQL/private settings/uploads, runs the additive migrations, and switches only the portfolio service, with application rollback on a failed switch. Run `npm run test:deploy` to check the updater's Bash syntax, isolation guards, and simulated recovery paths (Git Bash is required on Windows). Local implementation or a GitHub push does not update the running VPS by itself.
 
 ```sh
 npm run typecheck

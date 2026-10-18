@@ -9,6 +9,7 @@
     "typecheck": "tsc --noEmit",
     "test": "playwright test",
     "test:db": "node --test tests/database.test.mjs",
+    "test:deploy": "node --test tests/deploy.test.mjs",
     "db:local": "node scripts/local-postgres.mjs",
     "db:setup": "node scripts/database-setup.mjs",
     "db:check": "node scripts/database-check.mjs",

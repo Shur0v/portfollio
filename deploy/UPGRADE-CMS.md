@@ -2,6 +2,22 @@
 
 The working application is `/var/www/shurov`, the private configuration is `/srv/shurov-portfolio/shared/production.env`, media is `/srv/shurov-portfolio/shared/storage`, and the service is `shurov-portfolio.service` on localhost port 3047. Do not change the other applications, their PM2 processes, Docker containers, databases, Node runtime, or Nginx virtual hosts. Existing HTTPS and private admin credentials are retained.
 
+## Automated upgrade
+
+`deploy/update-vps.sh` automates the existing installation's upgrade. Run it as root with a full, verified Git commit SHA that has already been fetched into `/var/www/shurov`. It refuses unexpected paths, service configuration, database targets, local checkout changes, and concurrent deployments. It does not install a new server or repair an already unhealthy installation.
+
+To run everything in one command from the VPS root terminal, replace `VERIFIED_FULL_COMMIT_SHA` below with the exact 40-character commit supplied with the release:
+
+```bash
+(set -euo pipefail; cd /; revision=VERIFIED_FULL_COMMIT_SHA; runuser -u shurov-portfolio -- git -C /var/www/shurov fetch origin main; script=$(mktemp /root/shurov-update-XXXXXXXX.sh); runuser -u shurov-portfolio -- git -C /var/www/shurov show "$revision:deploy/update-vps.sh" > "$script"; bash "$script" "$revision")
+```
+
+The private repository may prompt for the GitHub username and a personal access token during `git fetch`. Enter them only in the terminal, never in the command or in chat. The updater reuses the existing database password and private admin settings without printing or regenerating them.
+
+The updater installs dependencies and type-checks an isolated candidate while the current application is online. It then briefly stops **only** the portfolio to take a consistent PostgreSQL and uploads backup, restarts the old application, applies additive migrations, and builds the candidate. Finally it switches the fixed `/var/www/shurov` folder and verifies localhost database health, public HTTPS health, and the homepage. A failed switch attempts to restore the old application automatically; database migrations and subsequent user data are never automatically rolled back. It does not reload Nginx, touch PM2/Docker, run browser tests on the production server, or change the other projects. No automatic backup cleanup is performed: review and manage retained disk usage separately.
+
+Root-only database, uploads, environment, and service-definition backups are kept in `/var/backups/shurov-portfolio`. The previous complete application is retained in `/var/www/shurov-releases` and its exact path is recorded inside the backup folder. Save these backup paths. Allow enough free disk space for an additional checkout/build plus the database and uploads backups. Public health checks are smoke tests, not a substitute for the functional checks in section 4.
+
 ## 1. Inspect and back up before updating
 
 Check `systemctl --no-pager status shurov-portfolio.service`, `git -C /var/www/shurov status --short` as the `shurov-portfolio` user, and available disk space. Stop if the checkout contains uncommitted source changes; preserve and review them before a deployment. Record the current commit, public health response, and both other applications' baseline health. Dreamshop's domain/certificate were already expired during the initial deployment; do not attempt to fix that unrelated condition as part of this upgrade.
