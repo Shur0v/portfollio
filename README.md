@@ -1,6 +1,6 @@
 # Shurov portfolio
 
-Next.js App Router, React, TypeScript, Tailwind CSS v4, and PostgreSQL. The homepage and all nine original case studies are native TSX. No page reads or injects HTML at runtime. Website content, projects, and contact messages use PostgreSQL; uploaded image files remain on disk. The original CSS and animation libraries remain intact.
+Next.js App Router, React, TypeScript, Tailwind CSS v4, and PostgreSQL. The homepage and all nine original case studies are native TSX, styled entirely through Tailwind. No legacy HTML templates, handwritten stylesheets, or HTML-injection rendering remain. Website content, projects, and contact messages use PostgreSQL; uploaded image files remain on disk. The existing animation libraries and visual design are preserved.
 
 ## Windows setup and running the project
 
@@ -126,10 +126,12 @@ Wait for the build to succeed and for the server to print `Ready`, then open `ht
 npm run typecheck
 npm run build
 npm run test:db
+npm run test:styles
+npm run test:deploy
 npm test
 ```
 
-The browser tests require Microsoft Edge and use ports 3100, 3101, and 3102. They launch a separate real PostgreSQL cluster on an available local port with isolated test credentials and temporary media storage. Keep the website test ports free. Database tests cover migration rollback, JSON import, idempotency, indexes, and a database restart. Do not run a development server while building or running tests because development and production both use the `.next` directory.
+The browser tests require Microsoft Edge and use ports 3100 and 3102. They launch a separate real PostgreSQL cluster on an available local port with isolated test credentials and temporary media storage. Keep the website test ports free. Database tests cover migration rollback, JSON import, idempotency, indexes, and a database restart. Style tests enforce TSX-only pages, a Tailwind-directives-only CSS entry, successful compilation of every design utility, and all animation keyframes. Do not run a development server while building or running tests because development and production both use the `.next` directory.
 
 ## Dashboard features
 
@@ -170,10 +172,12 @@ Website edits and published project edits increment a PostgreSQL revision throug
 - `lib/content-events.ts`, `app/api/content-events` — shared PostgreSQL listener and SSE delivery.
 - `lib/optimize-image.ts` — real decoding and bounded WebP compression of new uploads.
 - `data/projects.seed.json` — initial project content, imported once during database setup.
-- `public/assets` — original images, fonts, CSS, and animation scripts.
+- `public/assets` — images, locally served fonts, and animation scripts; no legacy stylesheets or HTML templates.
+- `styles` — TSX Tailwind utility catalogs and ordered custom variants for the existing responsive layout and animation hooks.
+- `tailwind.config.mts` — Tailwind animation/keyframe configuration.
 - `storage` — uploaded media and preserved legacy JSON, excluded from Git; not the live database.
 
-The original root HTML files and `assets` directory remain as a visual reference and backup only. They are not public Next.js pages. Old `index.html` and `single-project-*.html` URLs redirect to Next.js routes. `scripts/convert-pages.mjs` is a one-time migration utility; rerunning it replaces generated TSX and seed data, so edit the TSX directly going forward.
+The original HTML templates and all legacy CSS files have been removed. The homepage, all nine case-study variants, uploaded projects, privacy page, and dashboard use native TSX and Tailwind. Old `index.html` and `single-project-*.html` URLs remain redirect aliases, not HTML files or HTML-rendering templates. Original geometry measurements for all ten public layouts, three viewport widths, and both display themes are stored in `tests/fixtures/reference-layout.json`; tests no longer depend on an HTML reference server.
 
 The original case-study menus also contain template-only blog, dummy, and element-demo entries. Their visual content remains intact, but those demonstration destinations are not implemented portfolio routes. Links to existing portfolio sections use their actual destinations.
 
@@ -181,7 +185,9 @@ Those menu labels and links are now editable in the shared navigation fields, so
 
 ## Design preservation
 
-The original CSS, responsive breakpoints, GSAP effects, cursor, transitions, filtering, Swiper, and Fancybox remain in use. Tailwind utilities use the `tw:` prefix and omit Preflight to avoid resetting the portfolio's established styles. Add new Tailwind utilities as `tw:flex`, `tw:md:grid-cols-2`, etc. Public navigation uses normal links so page transitions initialize cleanly on each document load.
+All maintained styling is expressed as Tailwind utilities, including the lightbox, carousel, icons, dashboard, responsive breakpoints, and dark theme. `app/globals.css` contains only Tailwind imports/configuration/source directives, not handwritten selectors or declarations. Fonts are served through `next/font`. The `styles/utilities-*.tsx` catalogs use standard utilities and Tailwind arbitrary-property utilities for exact original measurements. `styles/variants.mts` defines ordered custom variants for the original ancestor/state/media selectors so specificity and cascade order remain stable, including shorthand/longhand overrides and CSS variables. Semantic `tt-*` classes are retained as GSAP, cursor, menu, filtering, Swiper, and Fancybox hooks, not as legacy CSS dependencies. Root utility scope only activates public design rules when a portfolio page is present, leaving dashboard layouts independent.
+
+Tailwind utilities use the `tw:` prefix and omit Preflight to avoid resetting the established design. Add new utilities as `tw:flex`, `tw:md:grid-cols-2`, etc. Edit the matching utility catalog and variant when changing an existing complex visual rule; do not reintroduce a `.css` stylesheet or rename CSS files as TypeScript. Public navigation uses normal links so page transitions initialize cleanly on each document load. Next.js/Tailwind still generate HTML and CSS as build output, as every browser needs; those generated artifacts are not source templates or handwritten stylesheets.
 
 ## Deployment and persistence
 
@@ -216,4 +222,4 @@ npm run test:db
 npm test
 ```
 
-Browser tests use Microsoft Edge and ports 3100, 3101, and 3102. They launch isolated production servers backed by a separate real PostgreSQL cluster, compare desktop/tablet/mobile geometry and scrolled sections in both display themes to the original, exercise all case-study routes, and test authenticated uploads, galleries, drafts, publishing, ordering, concurrent URL conflicts, PostgreSQL record storage, persistence in a fresh server process, deletion, and actual contact-form delivery to the protected inbox. Tests never connect to the real portfolio database or write to its media directory.
+Browser tests use Microsoft Edge and ports 3100 and 3102. They launch isolated production servers backed by a separate real PostgreSQL cluster, compare the homepage and all nine case-study layouts against saved original geometry at desktop/tablet/mobile widths in both display themes, capture scrolled sections, and test authenticated uploads, galleries, drafts, publishing, ordering, concurrent URL conflicts, PostgreSQL record storage, persistence in a fresh server process, deletion, and actual contact-form delivery to the protected inbox. Tests never connect to the real portfolio database or write to its media directory.

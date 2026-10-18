@@ -7,6 +7,7 @@ import sharp from "sharp";
 import seed from "../data/projects.seed.json";
 import cmsDefinitions from "../data/site-content.seed.json";
 import type { SitePageRecord } from "../lib/site-content-types";
+import designBaseline from "./fixtures/reference-layout.json";
 
 const testImage = { name: "cover.png", mimeType: "image/png", buffer: Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aD1sAAAAASUVORK5CYII=", "base64") };
 
@@ -43,34 +44,34 @@ test.beforeEach(({ page }) => {
   const errors: string[] = [];
   pageErrors.set(page, errors);
   page.on("pageerror", error => errors.push(`${page.url()} (${page.viewportSize()?.width}px): ${error.message}`));
+  page.on("console", message => {
+    if (message.type() === "error" && /hydration|hydrated|Minified React error #(?:418|423|425)/i.test(message.text())) errors.push(message.text());
+  });
 });
 
 test.afterEach(({ page }) => {
   expect(pageErrors.get(page)).toEqual([]);
 });
 
-test("portfolio keeps desktop and mobile geometry and runs animations", async ({ page, context }) => {
+test("portfolio keeps desktop and mobile geometry and runs animations", async ({ page }) => {
   await page.goto("/privacy");
   for (const width of [1440, 768, 390]) {
    for (const theme of ["disabled", "enabled"]) {
     await page.setViewportSize({ width, height: 900 });
-    const reference = await context.newPage();
-    await reference.setViewportSize({ width, height: 900 });
-    await reference.addInitScript(value => localStorage.setItem("tt-dark-mode-on", value), theme);
     await page.evaluate(value => localStorage.setItem("tt-dark-mode-on", value), theme);
-    await reference.goto("http://127.0.0.1:3101/");
     await page.goto("/");
     await page.waitForFunction(() => document.querySelector<HTMLScriptElement>('script[src="/assets/js/theme.js"]')?.dataset.loaded === "true");
+    await page.evaluate(() => Promise.allSettled([...document.images].map(image => { image.loading = "eager"; return image.decode(); })));
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(5500);
-    await reference.evaluate(() => document.fonts.ready);
+    const baseline = designBaseline.find(record => record.variant === 0 && record.width === width && record.theme === theme)!;
     const selectors = ["#page-header", ".ph-caption-title", "#portfolio", ".tt-grid-filter", "#services", "#about", "#faq", "#contact", "#tt-footer"];
     for (const selector of selectors) {
       const measure = (element: Element) => {
         const style = getComputedStyle(element);
         return { width: element.getBoundingClientRect().width, height: element.getBoundingClientRect().height, font: style.fontFamily, size: style.fontSize, color: style.color, padding: style.padding };
       };
-      const expected = await reference.locator(selector).first().evaluate(measure);
+      const expected = baseline.metrics[selector as keyof typeof baseline.metrics]!;
       const actual = await page.locator(selector).first().evaluate(measure);
       expect(actual.font, `${width}: ${selector} font`).toEqual(expected.font);
       expect(actual.size, `${width}: ${selector} font size`).toEqual(expected.size);
@@ -79,17 +80,13 @@ test("portfolio keeps desktop and mobile geometry and runs animations", async ({
       expect(Math.abs(actual.width - expected.width), `${width}: ${selector} width`).toBeLessThan(2);
       expect(Math.abs(actual.height - expected.height), `${width}: ${selector} height`).toBeLessThan(2);
     }
-    expect(await page.locator('.tt-grid-item').count()).toBe(await reference.locator('.tt-grid-item').count());
+    expect(await page.locator('.tt-grid-item').count()).toBe(seed.length + seed.filter(project => project.repeatInGrid).length);
     await page.screenshot({ path: `test-results/portfolio-${width}-${theme}.png` });
-    await reference.screenshot({ path: `test-results/reference-${width}-${theme}.png` });
     for (const section of ["portfolio", "about", "contact"]) {
       await page.evaluate(value => document.querySelector<HTMLAnchorElement>(`a[href="#${value}"]`)?.click(), section);
-      await reference.evaluate(value => document.querySelector<HTMLAnchorElement>(`a[href="#${value}"]`)?.click(), section);
       await page.waitForTimeout(2000);
       await page.screenshot({ path: `test-results/section-${section}-${width}-${theme}.png` });
-      await reference.screenshot({ path: `test-results/reference-section-${section}-${width}-${theme}.png` });
     }
-    await reference.close();
    }
   }
 });
@@ -131,11 +128,33 @@ test("filters, Load More, mobile menu, theme persistence and project transitions
 });
 
 test("all nine case studies render TSX pages", async ({ page }) => {
-  for (let index = 1; index <= 9; index++) {
-    const response = await page.goto(`/projects/project-${index}`);
+  test.setTimeout(480000);
+  await page.goto("/privacy");
+  for (const baseline of designBaseline.filter(record => record.variant > 0)) {
+    await page.setViewportSize({ width: baseline.width, height: 900 });
+    await page.evaluate(value => localStorage.setItem("tt-dark-mode-on", value), baseline.theme);
+    const response = await page.goto(`/projects/project-${baseline.variant}`);
     expect(response?.status()).toBe(200);
     await expect(page.locator(".ph-caption-title")).not.toBeEmpty();
     await page.waitForFunction(() => document.querySelector<HTMLScriptElement>('script[src="/assets/js/theme.js"]')?.dataset.loaded === "true");
+    await page.evaluate(() => Promise.allSettled([...document.images].map(image => { image.loading = "eager"; return image.decode(); })));
+    await page.evaluate(() => document.fonts.ready);
+    await page.waitForTimeout(4500);
+    for (const [selector, expected] of Object.entries(baseline.metrics)) {
+      if (!expected) continue;
+      const actual = await page.locator(selector).first().evaluate(element => {
+        const style = getComputedStyle(element), rectangle = element.getBoundingClientRect();
+        return { width: rectangle.width, height: rectangle.height, font: style.fontFamily, size: style.fontSize, color: style.color, padding: style.padding };
+      });
+      const label = `project ${baseline.variant}, ${baseline.width}px, ${baseline.theme}, ${selector}`;
+      expect(actual.font, `${label}: font`).toBe(expected.font);
+      expect(actual.size, `${label}: font size`).toBe(expected.size);
+      expect(actual.color, `${label}: color`).toBe(expected.color);
+      expect(actual.padding, `${label}: padding`).toBe(expected.padding);
+      expect(Math.abs(actual.width - expected.width), `${label}: width`).toBeLessThan(2);
+      expect(Math.abs(actual.height - expected.height), `${label}: height`).toBeLessThan(2);
+    }
+    await page.screenshot({ path: `test-results/project-${baseline.variant}-${baseline.width}-${baseline.theme}.png` });
   }
   const response = await page.goto("/single-project-1.html");
   expect(response?.status()).toBe(200);

@@ -5,7 +5,6 @@ import { mediaLabel } from "../../lib/media-label";
 import { useSiteContent } from "../site-content-provider";
 
 
-import type { CSSProperties } from "react";
 import type { ProjectPageProps } from "../../lib/project-types";
 import { ProjectGallery } from "../project-gallery";
 import { usePortfolioRuntime } from "../portfolio-runtime";

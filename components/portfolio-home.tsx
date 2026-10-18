@@ -5,7 +5,6 @@ import { mediaLabel } from "../lib/media-label";
 import { useSiteContent } from "./site-content-provider";
 
 
-import type { CSSProperties } from "react";
 import type { Project } from "../lib/project-types";
 import { ProjectGrid } from "./project-grid";
 import { usePortfolioRuntime } from "./portfolio-runtime";
@@ -640,7 +639,7 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
             <h2 className="tt-heading-title tt-anim-characters">
               {content.values["faq-2"]}
             </h2>
-            <div className="max-width-600" style={{"marginLeft":"auto","marginRight":"auto"} as CSSProperties}>
+            <div className="max-width-600 tw:mx-auto">
               <p className="tt-anim-lines">
                 {content.values["faq-3"]}
               </p>
