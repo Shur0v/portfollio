@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { rateLimited, sameOrigin } from "../../../lib/auth";
 import { saveMessage } from "../../../lib/messages";
 import { readLimitedBody } from "../../../lib/request-body";
+import { getSiteSnapshot } from "../../../lib/site-content";
 
 export async function POST(request: Request) {
   if (!sameOrigin(request)) return NextResponse.json({ success: false, message: "Please submit the form from this website." }, { status: 403 });
@@ -16,5 +17,5 @@ export async function POST(request: Request) {
   const message = (form.get("message") || "").trim();
   if (!name || name.length > 120 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254 || !message || message.length > 10000 || subject.length > 120) return NextResponse.json({ success: false, message: "Please check your name, email, and message." });
   await saveMessage({ id: crypto.randomUUID(), date: new Date().toISOString(), name, email, subject, message });
-  return NextResponse.json({ success: true, message: "Thank you! Your message has been received. I will get back to you soon." });
+  return NextResponse.json({ success: true, message: (await getSiteSnapshot()).pages.home.content.values["contact-success"] });
 }

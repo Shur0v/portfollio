@@ -36,6 +36,20 @@ test("PostgreSQL migration is atomic, imports JSON once, enforces indexes, and s
     assert.deepEqual(await setupDatabase(connectionString, legacy), { initialized: true, projects: 1, messages: 1 });
     assert.equal((await client.query("SELECT payload FROM portfolio_projects")).rows[0].payload.title, project.title);
     assert.equal((await client.query("SELECT message FROM portfolio_messages")).rows[0].message, message.message);
+    assert.equal(Number((await client.query("SELECT count(*) FROM portfolio_site_content")).rows[0].count), 13);
+    const site = await client.query("SELECT payload FROM portfolio_site_content WHERE id = 'home'");
+    assert.ok(Object.values(site.rows[0].payload.values).includes("Shurov"));
+    const siteRevision = Number((await client.query("SELECT revision FROM portfolio_content_revision")).rows[0].revision);
+    const received = [];
+    client.on("notification", notification => received.push(notification.payload));
+    await client.query("LISTEN portfolio_content_changed");
+    await client.query("BEGIN");
+    await client.query("UPDATE portfolio_site_content SET payload = jsonb_set(payload, '{values,test-notification}', '\"rolled back\"') WHERE id = 'home'");
+    await client.query("ROLLBACK");
+    assert.equal(Number((await client.query("SELECT revision FROM portfolio_content_revision")).rows[0].revision), siteRevision);
+    await client.query("UPDATE portfolio_site_content SET payload = jsonb_set(payload, '{values,test-notification}', '\"persisted CMS content\"') WHERE id = 'home'");
+    await new Promise(resolve => setTimeout(resolve, 100));
+    assert.ok(received.includes(String(siteRevision + 1)));
     const revision = Number((await client.query("SELECT revision FROM portfolio_content_revision")).rows[0].revision);
     await client.query("UPDATE portfolio_projects SET payload = jsonb_set(payload, '{title}', to_jsonb($1::text)) WHERE id = $2", ["Corrected database line", project.id]);
     assert.equal(Number((await client.query("SELECT revision FROM portfolio_content_revision")).rows[0].revision), revision + 1);
@@ -61,6 +75,7 @@ test("PostgreSQL migration is atomic, imports JSON once, enforces indexes, and s
     await client.connect();
     assert.equal((await client.query("SELECT count(*) FROM portfolio_projects")).rows[0].count, "0");
     assert.equal((await client.query("SELECT count(*) FROM portfolio_messages")).rows[0].count, "1");
+    assert.equal((await client.query("SELECT payload #>> '{values,test-notification}' AS value FROM portfolio_site_content WHERE id = 'home'")).rows[0].value, "persisted CMS content");
   } finally {
     if (client) await client.end();
     if (stop) await stop();

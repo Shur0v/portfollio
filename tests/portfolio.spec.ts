@@ -5,6 +5,8 @@ import path from "node:path";
 import { Client } from "pg";
 import sharp from "sharp";
 import seed from "../data/projects.seed.json";
+import cmsDefinitions from "../data/site-content.seed.json";
+import type { SitePageRecord } from "../lib/site-content-types";
 
 const testImage = { name: "cover.png", mimeType: "image/png", buffer: Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aD1sAAAAASUVORK5CYII=", "base64") };
 
@@ -347,4 +349,214 @@ test("uploads are resized and compressed and already-open public pages refresh l
     await page.request.put("/api/projects/project-1", { headers: { origin: "http://localhost:3100" }, data: { ...seed[0], gallery: [] } });
   }
   expect(errors).toEqual([]);
+});
+
+test("all content pages are persisted, authenticated, validated and conflict protected", async ({ page, request }) => {
+  expect((await request.get("/api/site-content/home")).status()).toBe(401);
+  expect((await request.put("/api/site-content/home", { headers: { origin: "http://localhost:3100" }, data: {} })).status()).toBe(401);
+  await page.goto(`${adminBase}/content`);
+  await expect(page).toHaveURL(new RegExp(`${adminLogin}$`));
+  await page.getByLabel("Login ID").fill("test-admin");
+  await page.getByLabel("Password").fill("test-only-password-2026");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await expect(page).toHaveURL(new RegExp(`${adminBase}$`));
+  for (const definition of cmsDefinitions) {
+    const response = await page.request.get(`/api/site-content/${definition.id}`);
+    expect(response.status()).toBe(200);
+    const { record } = await response.json();
+    const saved = await page.request.put(`/api/site-content/${definition.id}`, { headers: { origin: "http://localhost:3100" }, data: { version: record.version, content: record.content } });
+    expect(saved.status(), JSON.stringify(await saved.json())).toBe(200);
+  }
+  const { record } = await (await page.request.get("/api/site-content/home")).json();
+  const wrongOrigin = await page.request.put("/api/site-content/home", { headers: { origin: "https://attacker.example" }, data: { version: record.version, content: record.content } });
+  expect(wrongOrigin.status()).toBe(401);
+  const save = await page.request.put("/api/site-content/home", { headers: { origin: "http://localhost:3100" }, data: { version: record.version, content: record.content } });
+  expect(save.status()).toBe(200);
+  const conflict = await page.request.put("/api/site-content/home", { headers: { origin: "http://localhost:3100" }, data: { version: record.version, content: record.content } });
+  expect(conflict.status()).toBe(409);
+  const latest = (await save.json()).record;
+  const unsafe = structuredClone(latest.content);
+  const link = cmsDefinitions.find(definition => definition.id === "home")!.sections.flatMap(section => section.fields).find(field => field.type === "link")!;
+  unsafe.values[link.id] = "javascript:alert(1)";
+  expect((await page.request.put("/api/site-content/home", { headers: { origin: "http://localhost:3100" }, data: { version: latest.version, content: unsafe } })).status()).toBe(400);
+  unsafe.values[link.id] = latest.content.values[link.id];
+  unsafe.sectionOrder = ["not-a-real-section"];
+  expect((await page.request.put("/api/site-content/home", { headers: { origin: "http://localhost:3100" }, data: { version: latest.version, content: unsafe } })).status()).toBe(400);
+  expect((await page.request.get("/api/site-content/not-a-real-page")).status()).toBe(404);
+});
+
+test("whole-site edits push live, including case-study bodies, SEO and direct SQL corrections", async ({ page, context }) => {
+  await page.goto(adminLogin);
+  await page.getByLabel("Login ID").fill("test-admin");
+  await page.getByLabel("Password").fill("test-only-password-2026");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await expect(page).toHaveURL(new RegExp(`${adminBase}$`));
+  const originals: Record<string, SitePageRecord> = {};
+  for (const id of ["home", "global", "project-1"]) originals[id] = (await (await page.request.get(`/api/site-content/${id}`)).json()).record;
+  const publicPage = await context.newPage();
+  const errors: string[] = [];
+  publicPage.on("pageerror", error => errors.push(error.message));
+  await publicPage.route("**/api/content-version", route => route.abort());
+  const save = async (id: string, content: SitePageRecord["content"]) => {
+    const { record } = await (await page.request.get(`/api/site-content/${id}`)).json();
+    const response = await page.request.put(`/api/site-content/${id}`, { headers: { origin: "http://localhost:3100" }, data: { version: record.version, content } });
+    expect(response.status(), JSON.stringify(await response.json())).toBe(200);
+  };
+  try {
+    const stream = publicPage.waitForResponse(response => response.url().endsWith("/api/content-events") && response.status() === 200);
+    await publicPage.goto("/");
+    await stream;
+    const definition = cmsDefinitions.find(definition => definition.id === "home")!;
+    const heroName = definition.sections.flatMap(section => section.fields).find(field => field.value === "Shurov")!;
+    const home = structuredClone(originals.home.content);
+    home.values[heroName.id] = "Shurov Live CMS";
+    home.collections["hero-items"] = [];
+    const cursorField = definition.sections.flatMap(section => section.fields).find(field => field.value === "Play<br>Reel")!;
+    home.values[cursorField.id] = '<img src=x onerror="window.__cmsInjected=true">';
+    home.hiddenSections.push("clients");
+    home.sectionOrder = ["about", ...home.sectionOrder.filter(section => section !== "about")];
+    const faq = definition.collections.find(collection => collection.id === "faq-items")!;
+    const extra = structuredClone(home.collections[faq.id][0]);
+    extra.id = "live-faq-item";
+    const question = faq.templates.find(template => template.id === extra.template)!.fields.find(field => field.value.includes("What kind of projects"))!;
+    extra.values[question.id] = "Can I update every section?";
+    home.collections[faq.id].push(extra);
+    const started = Date.now();
+    await save("home", home);
+    await expect(publicPage.locator(".ph-caption-title")).toHaveText("Shurov Live CMS", { timeout: 8000 });
+    expect(Date.now() - started).toBeLessThan(8000);
+    await expect(publicPage.locator("#clients")).toHaveCount(0);
+    await expect(publicPage.locator(".ph-image-trail")).toHaveCount(0);
+    await publicPage.waitForFunction(() => document.querySelector<HTMLScriptElement>('script[src="/assets/js/theme.js"]')?.dataset.loaded === "true");
+    await publicPage.locator('#tt-header a[href="#clients"]').dispatchEvent("click");
+    await publicPage.locator(".tt-clipper-inner").dispatchEvent("mouseover");
+    expect(await publicPage.evaluate(() => "__cmsInjected" in window)).toBe(false);
+    await expect(publicPage.locator("#tt-page-content > div").first()).toHaveAttribute("id", "about");
+    await expect(publicPage.getByText("Can I update every section?", { exact: true })).toHaveCount(1);
+    const global = structuredClone(originals.global.content);
+    global.values["seo-title"] = "Shurov — Live PostgreSQL CMS";
+    await save("global", global);
+    await expect(publicPage).toHaveTitle("Shurov — Live PostgreSQL CMS", { timeout: 8000 });
+    await publicPage.goto("/projects/project-1");
+    const bodyField = cmsDefinitions.find(definition => definition.id === "project-1")!.sections.flatMap(section => section.fields).find(field => field.type === "textarea")!;
+    const projectContent = structuredClone(originals["project-1"].content);
+    projectContent.values[bodyField.id] = "This original case-study body is now fully editable in PostgreSQL.";
+    await save("project-1", projectContent);
+    await expect(publicPage.getByText(projectContent.values[bodyField.id], { exact: true })).toHaveCount(1, { timeout: 8000 });
+    await publicPage.goto("/");
+    const connectionString = await readFile(path.join(process.env.PLAYWRIGHT_STORAGE_DIR!, "database-url"), "utf8");
+    const client = new Client({ connectionString });
+    await client.connect();
+    try { await client.query("UPDATE portfolio_site_content SET payload = jsonb_set(payload, ARRAY['values', $1], to_jsonb($2::text)) WHERE id = 'home'", [heroName.id, "Direct PostgreSQL correction"]); }
+    finally { await client.end(); }
+    await expect(publicPage.locator(".ph-caption-title")).toHaveText("Direct PostgreSQL correction", { timeout: 8000 });
+  } finally {
+    await publicPage.close();
+    for (const [id, record] of Object.entries(originals)) await save(id, record.content);
+  }
+  expect(errors).toEqual([]);
+});
+
+test("website content editor saves profile content and stays responsive", async ({ page }) => {
+  await page.goto(adminLogin);
+  await page.getByLabel("Login ID").fill("test-admin");
+  await page.getByLabel("Password").fill("test-only-password-2026");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await expect(page).toHaveURL(new RegExp(`${adminBase}$`));
+  await page.getByRole("link", { name: "Edit website sections" }).click();
+  await expect(page.getByRole("heading", { name: "Website content", exact: true })).toBeVisible();
+  const { record } = await (await page.request.get("/api/site-content/home")).json();
+  const field = cmsDefinitions.find(definition => definition.id === "home")!.sections.flatMap(section => section.fields).find(field => field.value === "Shurov")!;
+  try {
+    await page.getByLabel("Find a field").fill("Text: Shurov");
+    const input = page.locator(`[id="home-${field.id}"]`);
+    await input.fill("Shurov Profile Editor");
+    await page.getByRole("button", { name: "Save website content", exact: true }).click();
+    await expect(page.getByRole("status")).toContainText("Saved to PostgreSQL");
+    await page.reload();
+    await page.getByLabel("Find a field").fill("Text: Shurov");
+    await expect(page.locator(`[id="home-${field.id}"]`)).toHaveValue("Shurov Profile Editor");
+    for (const width of [1440, 768, 390]) {
+      await page.setViewportSize({ width, height: 900 });
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      await page.screenshot({ path: `test-results/site-editor-${width}.png` });
+    }
+    await page.getByLabel("Content page").selectOption("global");
+    await page.getByLabel("Find a field").fill("Default upload compression");
+    await expect(page.getByLabel("Default upload compression", { exact: true })).toHaveValue("balanced");
+  } finally {
+    const { record: latest } = await (await page.request.get("/api/site-content/home")).json();
+    const response = await page.request.put("/api/site-content/home", { headers: { origin: "http://localhost:3100" }, data: { version: latest.version, content: record.content } });
+    expect(response.status()).toBe(200);
+  }
+});
+
+test("compression profiles persist and preserve transparency and animation", async ({ page }) => {
+  await page.goto(adminLogin);
+  await page.getByLabel("Login ID").fill("test-admin");
+  await page.getByLabel("Password").fill("test-only-password-2026");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await expect(page).toHaveURL(new RegExp(`${adminBase}$`));
+  const { record: original } = await (await page.request.get("/api/site-content/global")).json();
+  try {
+    const input = await sharp({ create: { width: 1600, height: 900, channels: 4, background: { r: 80, g: 130, b: 180, alpha: 0.4 } } }).withExif({ IFD0: { Artist: "Compression test" } }).png().toBuffer();
+    for (const profile of ["high-quality", "compact", "balanced"]) {
+      const { record } = await (await page.request.get("/api/site-content/global")).json();
+      record.content.values["image-profile"] = profile;
+      const saved = await page.request.put("/api/site-content/global", { headers: { origin: "http://localhost:3100" }, data: { version: record.version, content: record.content } });
+      expect(saved.status()).toBe(200);
+      const uploaded = await page.request.post("/api/uploads", { headers: { origin: "http://localhost:3100" }, multipart: { file: { name: "transparent.png", mimeType: "image/png", buffer: input } } });
+      expect(uploaded.status()).toBe(201);
+      const result = await uploaded.json();
+      expect(result.profile).toBe(profile);
+      const metadata = await sharp(await (await page.request.get(result.url)).body()).metadata();
+      expect(metadata.format).toBe("webp");
+      expect(metadata.hasAlpha).toBe(true);
+      expect(metadata.exif).toBeUndefined();
+      expect(result.bytes).toBeLessThan(input.length);
+    }
+    const animated = Buffer.concat([
+      Buffer.from("GIF89a", "ascii"), Buffer.from([1, 0, 1, 0, 128, 0, 0, 255, 0, 0, 0, 0, 255]),
+      Buffer.from([33, 249, 4, 4, 10, 0, 0, 0, 44, 0, 0, 0, 0, 1, 0, 1, 0, 0, 2, 2, 68, 1, 0]),
+      Buffer.from([33, 249, 4, 4, 10, 0, 0, 0, 44, 0, 0, 0, 0, 1, 0, 1, 0, 0, 2, 2, 76, 1, 0]), Buffer.from([59]),
+    ]);
+    expect((await sharp(animated, { animated: true }).metadata()).pages).toBe(2);
+    const uploaded = await page.request.post("/api/uploads", { headers: { origin: "http://localhost:3100" }, multipart: { file: { name: "animated.gif", mimeType: "image/gif", buffer: animated } } });
+    expect(uploaded.status(), JSON.stringify(await uploaded.json())).toBe(201);
+    const result = await uploaded.json();
+    const metadata = await sharp(await (await page.request.get(result.url)).body(), { animated: true }).metadata();
+    expect(metadata.format).toBe("webp");
+    expect(metadata.pages).toBe(2);
+  } finally {
+    const { record } = await (await page.request.get("/api/site-content/global")).json();
+    expect((await page.request.put("/api/site-content/global", { headers: { origin: "http://localhost:3100" }, data: { version: record.version, content: original.content } })).status()).toBe(200);
+  }
+});
+
+test("unpublished case-study content is absent from public HTML and serialized props", async ({ page }) => {
+  await page.goto(adminLogin);
+  await page.getByLabel("Login ID").fill("test-admin");
+  await page.getByLabel("Password").fill("test-only-password-2026");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await expect(page).toHaveURL(new RegExp(`${adminBase}$`));
+  const { record: original } = await (await page.request.get("/api/site-content/project-9")).json();
+  const field = cmsDefinitions.find(definition => definition.id === "project-9")!.sections.flatMap(section => section.fields).find(field => field.type === "textarea")!;
+  const secret = "UNPUBLISHED_CASE_BODY_PRIVATE_2026";
+  const content = structuredClone(original.content);
+  content.values[field.id] = secret;
+  const headers = { origin: "http://localhost:3100" };
+  try {
+    expect((await page.request.put("/api/site-content/project-9", { headers, data: { version: original.version, content } })).status()).toBe(200);
+    expect((await page.request.put("/api/projects/project-9", { headers, data: { ...seed[8], gallery: [], published: false } })).status()).toBe(200);
+    const home = await page.request.get("/");
+    expect(home.status()).toBe(200);
+    expect(await home.text()).not.toContain(secret);
+    const project = await page.request.get("/projects/project-9");
+    expect(project.status()).toBe(404);
+    expect(await project.text()).not.toContain(secret);
+  } finally {
+    const { record } = await (await page.request.get("/api/site-content/project-9")).json();
+    expect((await page.request.put("/api/site-content/project-9", { headers, data: { version: record.version, content: original.content } })).status()).toBe(200);
+    expect((await page.request.put("/api/projects/project-9", { headers, data: { ...seed[8], gallery: [], published: true } })).status()).toBe(200);
+  }
 });

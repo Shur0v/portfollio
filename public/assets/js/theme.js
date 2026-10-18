@@ -2211,7 +2211,7 @@
 				$ttContactForm.addClass("cfm-submitted");
 
 				// Display success message.
-				$cfmContainerInner.html('<span class="tt-cfm-success">' + response.message + '</span>'); // Look at the "mail.php" file to change this response message text.
+				$cfmContainerInner.append($("<span>").addClass("tt-cfm-success").text(response.message || ""));
 
 				$ttContactForm.trigger("reset"); // Reset the form.
 				$(".tt-form-group").removeClass("tt-fg-typing"); // Remove class from "tt-form-group" (for "tt-form-creative").
@@ -2219,7 +2219,7 @@
 				$ttContactForm.addClass("cfm-submitted");
 
 				// Display error message.
-				$cfmContainerInner.html('<span class="tt-cfm-error">' + response.message + '</span>'); // Look at the "mail.php" file to change this response message text.
+				$cfmContainerInner.append($("<span>").addClass("tt-cfm-error").text(response.message || ""));
 			}
 
 			scrollToContactFormTop(); // Scroll to the form top.

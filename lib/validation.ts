@@ -25,12 +25,15 @@ export function validateProject(data: Record<string, unknown>, previous?: Projec
   if (!Number.isInteger(order) || order < 0 || order > 10000) throw new Error("Order must be a whole number between 0 and 10000.");
   const gallery = data.gallery;
   if (!Array.isArray(gallery) || gallery.length > 20 || gallery.some(value => typeof value !== "string" || !mediaPath(value))) throw new Error("Upload up to 20 valid gallery images.");
+  const video = data.video === undefined ? previous?.video || [] : data.video;
+  if (!Array.isArray(video) || video.length > 2 || video.some(source => !source || typeof source.src !== "string" || !["video/mp4", "video/webm"].includes(source.type) || !/^\/(?:assets\/vids\/[a-zA-Z0-9_./-]+\.(?:mp4|webm))$/.test(source.src) && !/^https:\/\//.test(source.src) || source.src.includes("..") || /[\s<>\\]/.test(source.src))) throw new Error("Use up to two valid MP4/WebM asset paths or HTTPS video URLs.");
+  for (const source of video) if (source.src.startsWith("https://")) { const url = new URL(source.src); if (url.username || url.password) throw new Error("Video URLs cannot contain credentials."); }
   return {
     id: previous?.id || crypto.randomUUID(), slug, title, category, image, heroImage, website,
     description: textField(data, "description", 10000), client: textField(data, "client", 120),
     year: textField(data, "year", 20), role: textField(data, "role", 120),
     order, portrait: data.portrait === true, published: data.published === true,
-    template: previous?.template || 0, video: previous?.video || [], gallery,
+    template: previous?.template || 0, video, gallery,
     repeatInGrid: data.repeatInGrid === true,
     additionalCategories: Array.isArray(data.additionalCategories) ? data.additionalCategories.filter(category => ["Branding", "Digital", "Artistic"].includes(category) && category !== data.category) : [],
   };

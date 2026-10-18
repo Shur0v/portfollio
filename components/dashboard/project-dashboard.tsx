@@ -37,7 +37,7 @@ export function ProjectDashboard({ initialProjects, basePath }: { initialProject
       if (!response.ok) throw new Error(result.error);
       setProjects(current => [...current.filter(project => project.id !== result.project.id), result.project].sort((left, right) => left.order - right.order));
       setDraft(result.project); setDirty(false);
-      setMessage(result.project.published ? "Project saved and published. Open portfolio pages update automatically within 10 seconds." : "Draft saved. It is hidden from the portfolio.");
+      setMessage(result.project.published ? "Project saved and published. Connected portfolio pages receive the update immediately." : "Draft saved. It is hidden from the portfolio.");
     } catch (error) { setError(error instanceof Error ? error.message : "Save failed."); }
     finally { setBusy(false); }
   }
@@ -89,6 +89,7 @@ export function ProjectDashboard({ initialProjects, basePath }: { initialProject
     </header>
     <div className="tw:grid tw:gap-8 tw:lg:grid-cols-[300px_1fr]">
       <aside>
+        <a className="button tw:mb-4 tw:w-full" href={`${basePath}/content`}>Edit website sections</a>
         <button className="tw:w-full tw:mb-4" disabled={busy} onClick={() => select(emptyProject())}>+ New project</button>
         <label>Search projects<input type="search" value={filter} onChange={event => setFilter(event.target.value)} /></label>
         <div className="tw:mt-4 tw:space-y-3">
@@ -119,6 +120,7 @@ export function ProjectDashboard({ initialProjects, basePath }: { initialProject
                 {([['image', 'Cover image'], ['heroImage', 'Hero image (optional)']] as const).map(([field, label]) => <label key={field}>{label}{draft[field] && <img src={draft[field]} alt={label} className="tw:mt-3 tw:h-40 tw:w-full tw:rounded-lg tw:object-cover" />}<input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={event => { void upload(event.target.files, field); event.target.value = ""; }} /><span className="tw:text-xs tw:text-zinc-400">JPG, PNG, WebP or GIF · up to 10 MB input · compressed to WebP (max 2 MB)</span></label>)}
               </div>
               <label>Gallery images (up to 20)<input type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple onChange={event => { void upload(event.target.files, "gallery"); event.target.value = ""; }} /></label>
+              <div className="tw:grid tw:gap-5 tw:sm:grid-cols-2">{(["video/mp4", "video/webm"] as const).map(type => <label key={type}>{type === "video/mp4" ? "MP4 video URL (optional)" : "WebM video URL (optional)"}<input value={draft.video.find(source => source.type === type)?.src || ""} onChange={event => change("video", [...draft.video.filter(source => source.type !== type), ...(event.target.value ? [{ type, src: event.target.value }] : [])])} /><span className="tw:text-xs tw:text-zinc-400">Existing /assets/vids/ path or HTTPS URL. Leave both empty to use an image cover.</span></label>)}</div>
               <div className="tw:grid tw:grid-cols-2 tw:gap-3 tw:sm:grid-cols-3">{draft.gallery?.map((image, index) => <div key={image + index}><img src={image} alt={`Gallery ${index + 1}`} className="tw:h-24 tw:w-full tw:object-cover" /><button type="button" onClick={() => change("gallery", draft.gallery!.filter((_, position) => index !== position))}>Remove image {index + 1}</button></div>)}</div>
               {draft.template > 0 && <p className="tw:text-sm tw:text-zinc-400">The original case-study layout and media are preserved. Added gallery images appear below its existing content.</p>}
               <label><input type="checkbox" checked={draft.portrait} onChange={event => change("portrait", event.target.checked)} /> Portrait cover layout</label>

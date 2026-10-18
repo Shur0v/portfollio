@@ -52,6 +52,26 @@ export async function setupDatabase(connectionString, legacyDirectory = path.res
       await client.query(await readFile(path.join(root, "database/002-live-content.sql"), "utf8"));
       await client.query("INSERT INTO portfolio_migrations (version) VALUES (2)");
     }
+    const siteMigration = await client.query("SELECT version FROM portfolio_migrations WHERE version = 3");
+    if (!siteMigration.rowCount) {
+      await client.query(await readFile(path.join(root, "database/003-site-content.sql"), "utf8"));
+      const definitions = JSON.parse(await readFile(path.join(root, "data/site-content.seed.json"), "utf8"));
+      for (const definition of definitions) {
+        const payload = {
+          values: Object.fromEntries(definition.sections.flatMap(section => section.fields.map(field => [field.id, field.value]))),
+          collections: Object.fromEntries(definition.collections.map(collection => [collection.id, collection.items])),
+          sectionOrder: definition.sectionOrder,
+          hiddenSections: [],
+        };
+        await client.query("INSERT INTO portfolio_site_content (id, payload) VALUES ($1, $2::jsonb)", [definition.id, JSON.stringify(payload)]);
+      }
+      await client.query("INSERT INTO portfolio_migrations (version) VALUES (3)");
+    }
+    const versionMigration = await client.query("SELECT version FROM portfolio_migrations WHERE version = 4");
+    if (!versionMigration.rowCount) {
+      await client.query(await readFile(path.join(root, "database/004-site-version.sql"), "utf8"));
+      await client.query("INSERT INTO portfolio_migrations (version) VALUES (4)");
+    }
     await client.query("COMMIT");
     return result;
   } catch (error) {

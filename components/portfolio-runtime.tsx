@@ -13,6 +13,15 @@ let initialization: Promise<void> | undefined;
 
 export function usePortfolioRuntime() {
   useEffect(() => {
+    const protectMissingAnchor = (event: MouseEvent) => {
+      const anchor = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>("a[href]") : null;
+      const href = anchor?.getAttribute("href") || "";
+      if (!href.startsWith("#") || href.length < 2 || href === "#0") return;
+      let target = href.slice(1);
+      try { target = decodeURIComponent(target); } catch { }
+      if (!document.getElementById(target)) { event.preventDefault(); event.stopImmediatePropagation(); }
+    };
+    document.addEventListener("click", protectMissingAnchor, true);
     initialization ??= (async () => {
       document.body.id = "body";
       document.body.classList.add("tt-transition", "tt-magic-cursor", "tt-smooth-scroll");
@@ -44,5 +53,6 @@ export function usePortfolioRuntime() {
       console.error(error);
       document.getElementById("tt-page-transition")?.remove();
     });
+    return () => document.removeEventListener("click", protectMissingAnchor, true);
   }, []);
 }

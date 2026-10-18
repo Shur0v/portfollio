@@ -1,11 +1,18 @@
 "use client";
 
+import { Fragment } from "react";
+import { mediaLabel } from "../lib/media-label";
+import { useSiteContent } from "./site-content-provider";
+
+
 import type { CSSProperties } from "react";
 import type { Project } from "../lib/project-types";
 import { ProjectGrid } from "./project-grid";
 import { usePortfolioRuntime } from "./portfolio-runtime";
 
 export default function PortfolioHome({ projects }: { projects: Project[] }) {
+  const content = useSiteContent("home");
+  const shared = useSiteContent("global");
   usePortfolioRuntime();
   return (<main id="body-inner">
   <div id="tt-page-transition">
@@ -17,7 +24,7 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
     </div>
     <div className="tt-ptr-preloader">
       <div className="tt-ptr-prel-content">
-        <img src="/assets/img/logo-light.png" className="tt-ptr-prel-image" alt="Logo" />
+        <img src={shared.values["branding-352021170840"]} className="tt-ptr-prel-image" alt={shared.values["branding-eb47624bd1e4"]} />
       </div>
     </div>
   </div>
@@ -31,9 +38,9 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
       <div className="tt-header-inner">
         <div className="tt-header-col tt-header-col-left">
           <div className="tt-logo">
-            <a href="/" className="tt-magnetic-item">
-              <img src="/assets/img/logo-light.png" className="tt-logo-light" alt="Logo" />
-              <img src="/assets/img/logo-dark.png" className="tt-logo-dark" alt="Logo" />
+            <a href={shared.values["branding-837654628ed0"]} className="tt-magnetic-item">
+              <img src={shared.values["branding-352021170840"]} className="tt-logo-light" alt={shared.values["branding-eb47624bd1e4"]} />
+              <img src={shared.values["branding-eed568f752c9"]} className="tt-logo-dark" alt={shared.values["branding-eb47624bd1e4"]} />
             </a>
           </div>
         </div>
@@ -44,38 +51,38 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
                 <div className="tt-main-menu-content">
                   <ul className="tt-main-menu-list">
                     <li>
-                      <a href="#body">
-                        {"Home"}
+                      <a href={shared.values["navigation-75028b91ed94"]}>
+                        {shared.values["navigation-b071da6c34ef"]}
                       </a>
                     </li>
                     <li>
-                      <a href="#portfolio">
-                        {"Portfolio"}
+                      <a href={shared.values["navigation-8c2d9d4dddbc"]}>
+                        {shared.values["navigation-da4deec83426"]}
                       </a>
                     </li>
                     <li>
-                      <a href="#about">
-                        {"About"}
+                      <a href={shared.values["navigation-3dfe9ad6b2b0"]}>
+                        {shared.values["navigation-b604921848fa"]}
                       </a>
                     </li>
                     <li>
-                      <a href="#clients">
-                        {"Clients"}
+                      <a href={shared.values["navigation-b74d0b8c7591"]}>
+                        {shared.values["navigation-b5e4a0d92e12"]}
                       </a>
                     </li>
                     <li>
-                      <a href="#services">
-                        {"Services"}
+                      <a href={shared.values["navigation-80edc576f931"]}>
+                        {shared.values["navigation-b67954d42188"]}
                       </a>
                     </li>
                     <li>
-                      <a href="#faq">
-                        {"FAQ"}
+                      <a href={shared.values["navigation-fe4a1d1d608b"]}>
+                        {shared.values["navigation-95d7ac1de57e"]}
                       </a>
                     </li>
                     <li>
-                      <a href="#contact">
-                        {"Contact"}
+                      <a href={shared.values["navigation-200dc7c7426a"]}>
+                        {shared.values["navigation-e349bf04f7ac"]}
                       </a>
                     </li>
                   </ul>
@@ -88,23 +95,23 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
           <div id="tt-m-menu-toggle-btn-wrap">
             <div className="tt-m-menu-toggle-btn-text">
               <span className="tt-m-menu-text-menu">
-                {"Menu"}
+                {shared.values["navigation-968b11572783"]}
               </span>
               <span className="tt-m-menu-text-close">
-                {"Close"}
+                {shared.values["navigation-eff823d9ccef"]}
               </span>
             </div>
             <div className="tt-m-menu-toggle-btn-holder">
-              <a href="#" className="tt-m-menu-toggle-btn">
+              <a href={shared.values["navigation-2c8dce6c5ff4"]} className="tt-m-menu-toggle-btn">
                 <span>
 
                 </span>
               </a>
             </div>
           </div>
-          <a href="#contact" className="tt-btn tt-btn-secondary hide-from-xlg tt-magnetic-item">
-            <span data-hover="Let's Talk">
-              {"Let's Talk"}
+          <a href={shared.values["navigation-200dc7c7426a"]} className="tt-btn tt-btn-secondary hide-from-xlg tt-magnetic-item">
+            <span data-hover={shared.values["navigation-baef14aaf201"]}>
+              {shared.values["navigation-baef14aaf201"]}
             </span>
           </a>
           <div className="tt-style-switch">
@@ -153,31 +160,22 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
       </div>
     </header>
     <div id="page-header" className="ph-full ph-full-m ph-center ph-cap-xxxxlg ph-image-parallax ph-caption-parallax">
-      <div className="ph-image-trail ph-itr-full">
-        <img className="ph-itr-img" src="/assets/img/img-trail/img-trail-1-600.png" alt="Image" />
-        <img className="ph-itr-img" src="/assets/img/img-trail/img-trail-2-600.png" alt="Image" />
-        <img className="ph-itr-img" src="/assets/img/img-trail/img-trail-3-600.png" alt="Image" />
-        <img className="ph-itr-img" src="/assets/img/img-trail/img-trail-4-600.png" alt="Image" />
-        <img className="ph-itr-img" src="/assets/img/img-trail/img-trail-5-600.png" alt="Image" />
-        <img className="ph-itr-img" src="/assets/img/img-trail/img-trail-6-600.png" alt="Image" />
-        <img className="ph-itr-img" src="/assets/img/img-trail/img-trail-7-600.png" alt="Image" />
-        <img className="ph-itr-img" src="/assets/img/img-trail/img-trail-8-600.png" alt="Image" />
-        <img className="ph-itr-img" src="/assets/img/img-trail/img-trail-9-600.png" alt="Image" />
-        <img className="ph-itr-img" src="/assets/img/img-trail/img-trail-10-600.png" alt="Image" />
-      </div>
+      {!!content.collections["hero-items"].length && <div className="ph-image-trail ph-itr-full">
+        {content.collections["hero-items"].map(item => <Fragment key={item.id}>{item.template === "layout-1" ? (<img className="ph-itr-img" src={item.values["field-1"]} alt={item.values["field-2"]} />) : null}</Fragment>)}
+      </div>}
       <div className="page-header-inner">
         <div className="ph-caption">
           <div className="ph-caption-inner">
             <h2 className="ph-caption-subtitle">
-              {"( Hello, it's me )"}
+              {content.values["hero-1"]}
             </h2>
             <h1 className="ph-caption-title">
-              {"Shurov"}
+              {content.values["hero-2"]}
             </h1>
             <div className="ph-caption-description max-width-700">
-              {" Design and development, done with passion,"}
+              {content.values["hero-3"]}
               <br />
-              {" curiosity, and a little bit of mischief. "}
+              {content.values["hero-4"]}
             </div>
           </div>
         </div>
@@ -186,29 +184,29 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
         <div className="tt-social-buttons">
           <ul>
             <li>
-              <a href="https://www.facebook.com/themetorium" className="tt-magnetic-item" target="_blank" rel="noopener">
-                <i className="fa-brands fa-facebook-f">
+              <a href={content.values["hero-5"]} className="tt-magnetic-item" target="_blank" rel="noopener">
+                <i className={content.values["hero-6"]}>
 
                 </i>
               </a>
             </li>
             <li>
-              <a href="https://x.com/Themetorium" className="tt-magnetic-item" target="_blank" rel="noopener">
-                <i className="fa-brands fa-x-twitter">
+              <a href={content.values["hero-7"]} className="tt-magnetic-item" target="_blank" rel="noopener">
+                <i className={content.values["hero-8"]}>
 
                 </i>
               </a>
             </li>
             <li>
-              <a href="https://dribbble.com/Themetorium" className="tt-magnetic-item" target="_blank" rel="noopener">
-                <i className="fa-brands fa-dribbble">
+              <a href={content.values["hero-9"]} className="tt-magnetic-item" target="_blank" rel="noopener">
+                <i className={content.values["hero-10"]}>
 
                 </i>
               </a>
             </li>
             <li>
-              <a href="https://www.behance.net/Themetorium" className="tt-magnetic-item" target="_blank" rel="noopener">
-                <i className="fa-brands fa-behance">
+              <a href={content.values["hero-11"]} className="tt-magnetic-item" target="_blank" rel="noopener">
+                <i className={content.values["hero-12"]}>
 
                 </i>
               </a>
@@ -217,7 +215,7 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
         </div>
       </div>
       <div className="tt-scroll-down">
-        <a href="#tt-page-content" className="tt-sd-inner tt-magnetic-item" data-offset="0">
+        <a href={content.values["hero-13"]} className="tt-sd-inner tt-magnetic-item" data-offset="0">
           <div className="tt-sd-arrow">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <path d="M13.025 1l-2.847 2.828 6.176 6.176h-16.354v3.992h16.354l-6.176 6.176 2.847 2.828 10.975-11z">
@@ -228,31 +226,30 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
         </a>
       </div>
     </div>
-    <div id="tt-page-content">
-      <div id="portfolio" className="tt-section padding-top-xlg-20">
+    <div id="tt-page-content">{content.sectionOrder.filter(section => !content.hiddenSections.includes(section)).map(section => <Fragment key={section}>{section === "portfolio" ? (<Fragment><div id="portfolio" className="tt-section padding-top-xlg-20">
         <div className="tt-section-inner tt-wrap max-width-1600 margin-bottom-80">
           <div className="tt-heading tt-heading-lg tt-heading-center">
             <h3 className="tt-heading-subtitle tt-anim-lines">
-              {"( Portfolio )"}
+              {content.values["portfolio-1"]}
             </h3>
             <h2 className="tt-heading-title tt-anim-characters">
-              {" Discover "}
+              {content.values["portfolio-2"]}
               <span className="tt-text-image tt-timg-fixed tt-timg-boxed tt-timg-tilted-1">
-                <img src="/assets/img/misc/text-img-3.gif" alt="Image" />
+                <img src={content.values["portfolio-3"]} alt={content.values["portfolio-4"]} />
               </span>
-              {" a"}
+              {content.values["portfolio-5"]}
               <br />
-              {" Showcase of My"}
+              {content.values["portfolio-6"]}
               <br />
               <span className="tt-text-image tt-timg-fixed tt-timg-boxed tt-timg-tilted-2">
-                <a href="https://themetorium.net/" target="_blank" rel="nofollow noopener">
-                  <img src="/assets/img/misc/text-img-2.jpg" alt="Image" />
+                <a href={content.values["portfolio-7"]} target="_blank" rel="nofollow noopener">
+                  <img src={content.values["portfolio-8"]} alt={content.values["portfolio-9"]} />
                 </a>
               </span>
-              {" Creative Journey "}
+              {content.values["portfolio-10"]}
             </h2>
             <p className="max-width-700 tt-anim-lines">
-              {"Take a look at how my ideas have evolved, shaped by a genuine passion for building engaging digital experiences."}
+              {content.values["portfolio-11"]}
             </p>
           </div>
         </div>
@@ -261,72 +258,72 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
             <div className="tt-grid tt-grid-col-4 tt-grid-gap-3 tt-grid-appear">
               <div className="tt-grid-filter tt-grf-center tt-anim-fadeinup">
                 <button type="button" className="tt-btn tt-btn-secondary tt-magnetic-item">
-                  <span data-hover="Show All">
-                    {"Show All"}
+                  <span data-hover={content.values["portfolio-12"]}>
+                    {content.values["portfolio-13"]}
                   </span>
                 </button>
                 <button type="button" className="tt-btn tt-btn-accent tt-magnetic-item" data-filter=".branding">
-                  <span data-hover="Branding">
-                    {"Branding"}
+                  <span data-hover={content.values["portfolio-14"]}>
+                    {content.values["portfolio-15"]}
                   </span>
                 </button>
                 <button type="button" className="tt-btn tt-btn-accent tt-magnetic-item" data-filter=".digital">
-                  <span data-hover="Digital">
-                    {"Digital"}
+                  <span data-hover={content.values["portfolio-16"]}>
+                    {content.values["portfolio-17"]}
                   </span>
                 </button>
                 <button type="button" className="tt-btn tt-btn-accent tt-magnetic-item" data-filter=".artistic">
-                  <span data-hover="Artistic">
-                    {"Artistic"}
+                  <span data-hover={content.values["portfolio-18"]}>
+                    {content.values["portfolio-19"]}
                   </span>
                 </button>
               </div>
               <ProjectGrid projects={projects} />
               <div className="tt-grid-load-more" data-show-items="8" data-load-more-items="8">
                 <div className="tt-grlm-btn-wrap">
-                  <a href="#0" className="tt-grlm-btn tt-btn tt-btn-accent tt-magnetic-item">
-                    <span data-hover="Load More">
-                      {"Load More"}
+                  <a href={content.values["portfolio-20"]} className="tt-grlm-btn tt-btn tt-btn-accent tt-magnetic-item">
+                    <span data-hover={content.values["portfolio-21"]}>
+                      {content.values["portfolio-22"]}
                     </span>
                     <span className="tt-btn-icon">
-                      <i className="fa-regular fa-plus">
+                      <i className={content.values["portfolio-23"]}>
 
                       </i>
                     </span>
                   </a>
                 </div>
                 <div className="tt-grid-no-more-msg">
-                  {"No more items to show."}
+                  {content.values["portfolio-24"]}
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div id="services" className="tt-section no-padding-bottom">
+</Fragment>) : section === "services" ? (<Fragment><div id="services" className="tt-section no-padding-bottom">
         <div className="tt-section-inner tt-wrap">
           <div className="tt-heading tt-heading-xxxlg tt-heading-center">
             <h3 className="tt-heading-subtitle tt-anim-lines">
-              {"( What I Do )"}
+              {content.values["services-1"]}
             </h3>
             <h2 className="tt-heading-title tt-anim-characters">
-              {"Services"}
+              {content.values["services-2"]}
             </h2>
             <p className="max-width-600 tt-anim-lines">
-              {"End-to-end digital services that elevate your online presence, connect you with your audience, and turn ideas into real, impactful results. "}
+              {content.values["services-3"]}
             </p>
           </div>
         </div>
       </div>
-      <div className="tt-section">
+<div className="tt-section">
         <div className="tt-section-inner">
           <div className="tt-accordion tt-acc-xlg tt-acc-counter tt-acc-borders tt-acc-tilted">
-            <div className="tt-accordion-item tt-anim-fadeinup">
+            {content.collections["services-items"].map(item => <Fragment key={item.id}>{item.template === "layout-1" ? (<div className="tt-accordion-item tt-anim-fadeinup">
               <div className="tt-accordion-heading">
                 <div className="tt-acc-head cursor-alter">
                   <div className="tt-acc-head-inner">
                     <h3 className="tt-acc-head-title">
-                      {"Digital Strategy"}
+                      {item.values["field-1"]}
                     </h3>
                   </div>
                 </div>
@@ -344,31 +341,30 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
                 <div className="tt-row">
                   <div className="tt-col-lg-8">
                     <p>
-                      {"I create data-driven digital strategies that align with your business goals and deliver measurable growth. Using audience insights, competitor analysis, and clear KPIs, I build a focused roadmap that strengthens your online presence and improves results across key channels."}
+                      {item.values["field-2"]}
                     </p>
                     <p>
-                      {"Whether you want more visibility, better engagement, or higher conversions, I turn real opportunities into practical actions and help you grow with confidence."}
+                      {item.values["field-3"]}
                     </p>
                   </div>
                   <div className="tt-col-lg-1">
 
                   </div>
                   <div className="tt-col-lg-3">
-                    <a href="/privacy" className="tt-btn tt-btn-secondary tt-btn-round tt-magnetic-item" target="_blank">
-                      <span data-hover="More">
-                        {"More"}
+                    <a href={item.values["field-4"]} className="tt-btn tt-btn-secondary tt-btn-round tt-magnetic-item" target="_blank">
+                      <span data-hover={item.values["field-5"]}>
+                        {item.values["field-6"]}
                       </span>
                     </a>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="tt-accordion-item tt-anim-fadeinup">
+            </div>) : item.template === "layout-2" ? (<div className="tt-accordion-item tt-anim-fadeinup">
               <div className="tt-accordion-heading">
                 <div className="tt-acc-head cursor-alter">
                   <div className="tt-acc-head-inner">
                     <h3 className="tt-acc-head-title">
-                      {"Branding & Identity"}
+                      {item.values["field-1"]}
                     </h3>
                   </div>
                 </div>
@@ -386,287 +382,73 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
                 <div className="tt-row">
                   <div className="tt-col-lg-8">
                     <p>
-                      {"I build brands that truly connect. From logo design and color systems to voice and messaging, I create cohesive identities that reflect your values and make your business memorable."}
+                      {item.values["field-2"]}
                     </p>
                     <p>
-                      {"Whether you’re launching something new or refreshing an existing brand, I guide you through a clear process and ensure every element works together to tell a consistent, authentic story that stands out."}
+                      {item.values["field-3"]}
+                    </p>
+                    <p>
+                      {item.values["field-4"]}
                     </p>
                   </div>
                   <div className="tt-col-lg-1">
 
                   </div>
                   <div className="tt-col-lg-3">
-                    <a href="/privacy" className="tt-btn tt-btn-secondary tt-btn-round tt-magnetic-item" target="_blank">
-                      <span data-hover="More">
-                        {"More"}
+                    <a href={item.values["field-5"]} className="tt-btn tt-btn-secondary tt-btn-round tt-magnetic-item" target="_blank">
+                      <span data-hover={item.values["field-6"]}>
+                        {item.values["field-7"]}
                       </span>
                     </a>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="tt-accordion-item tt-anim-fadeinup">
-              <div className="tt-accordion-heading">
-                <div className="tt-acc-head cursor-alter">
-                  <div className="tt-acc-head-inner">
-                    <h3 className="tt-acc-head-title">
-                      {"UI / UX Design"}
-                    </h3>
-                  </div>
-                </div>
-                <div className="tt-accordion-caret">
-                  <div className="tt-accordion-caret-inner tt-magnetic-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                      <path d="M13.025 1l-2.847 2.828 6.176 6.176h-16.354v3.992h16.354l-6.176 6.176 2.847 2.828 10.975-11z">
-
-                      </path>
-                    </svg>
-                  </div>
-                </div>
-              </div>
-              <div className="tt-accordion-content max-width-1600">
-                <div className="tt-row">
-                  <div className="tt-col-lg-8">
-                    <p>
-                      {"I design intuitive, engaging digital experiences that balance clarity and visual appeal. Using user-centered principles and a solid understanding of your audience, I create wireframes, prototypes, and polished interfaces that are easy to navigate and built to perform reliably across devices and browsers."}
-                    </p>
-                    <p>
-                      {"From websites to apps and custom platforms, every interaction is purposeful, natural, and focused on usability, engagement, and real-world results."}
-                    </p>
-                  </div>
-                  <div className="tt-col-lg-1">
-
-                  </div>
-                  <div className="tt-col-lg-3">
-                    <a href="/privacy" className="tt-btn tt-btn-secondary tt-btn-round tt-magnetic-item" target="_blank">
-                      <span data-hover="More">
-                        {"More"}
-                      </span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="tt-accordion-item tt-anim-fadeinup">
-              <div className="tt-accordion-heading">
-                <div className="tt-acc-head cursor-alter">
-                  <div className="tt-acc-head-inner">
-                    <h3 className="tt-acc-head-title">
-                      {"Web App Development"}
-                    </h3>
-                  </div>
-                </div>
-                <div className="tt-accordion-caret">
-                  <div className="tt-accordion-caret-inner tt-magnetic-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                      <path d="M13.025 1l-2.847 2.828 6.176 6.176h-16.354v3.992h16.354l-6.176 6.176 2.847 2.828 10.975-11z">
-
-                      </path>
-                    </svg>
-                  </div>
-                </div>
-              </div>
-              <div className="tt-accordion-content max-width-1600">
-                <div className="tt-row">
-                  <div className="tt-col-lg-8">
-                    <p>
-                      {" I specialize in converting any Figma design into a fully responsive, pixel-perfect, and production-ready web application. From complex UI systems and advanced user experiences to highly interactive animations with GSAP, I focus on building clean, scalable, and maintainable code that performs flawlessly across all devices and modern browsers. "}
-                    </p>
-                    <p>
-                      {"Beyond frontend development, I build complete custom backend architectures using Nextjs, Express.js, Nest.JS, PostgreSQL, MongoDB, and MySQL. Whether it's a business platform, SaaS product, dashboard system, CMS, or enterprise application, I develop tailored solutions designed around the specific requirements of each project rather than relying on generic shortcuts or pre-built systems. "}
-                    </p>
-                    <p>
-                      {"Security, performance, and scalability are integrated into every stage of development. From database design and API architecture to authentication, authorization, and server-side optimization, I ensure every layer of the application is built to industry standards. My goal is to deliver reliable, future-ready products that combine exceptional user experience with robust technical foundations."}
-                    </p>
-                  </div>
-                  <div className="tt-col-lg-1">
-
-                  </div>
-                  <div className="tt-col-lg-3">
-                    <a href="/privacy" className="tt-btn tt-btn-secondary tt-btn-round tt-magnetic-item" target="_blank">
-                      <span data-hover="More">
-                        {"More"}
-                      </span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="tt-accordion-item tt-anim-fadeinup">
-              <div className="tt-accordion-heading">
-                <div className="tt-acc-head cursor-alter">
-                  <div className="tt-acc-head-inner">
-                    <h3 className="tt-acc-head-title">
-                      {"Product Design"}
-                    </h3>
-                  </div>
-                </div>
-                <div className="tt-accordion-caret">
-                  <div className="tt-accordion-caret-inner tt-magnetic-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                      <path d="M13.025 1l-2.847 2.828 6.176 6.176h-16.354v3.992h16.354l-6.176 6.176 2.847 2.828 10.975-11z">
-
-                      </path>
-                    </svg>
-                  </div>
-                </div>
-              </div>
-              <div className="tt-accordion-content max-width-1600">
-                <div className="tt-row">
-                  <div className="tt-col-lg-8">
-                    <p>
-                      {"I design products with purpose, focusing on real problems and real users. By combining research, thoughtful functionality, and refined aesthetics, I create solutions that are practical, intuitive, and built to last."}
-                    </p>
-                    <p>
-                      {"From concept and prototyping to final design, every step is guided by usability and clear business goals. Whether digital or physical, the result is a product people enjoy using and businesses can rely on."}
-                    </p>
-                  </div>
-                  <div className="tt-col-lg-1">
-
-                  </div>
-                  <div className="tt-col-lg-3">
-                    <a href="/privacy" className="tt-btn tt-btn-secondary tt-btn-round tt-magnetic-item" target="_blank">
-                      <span data-hover="More">
-                        {"More"}
-                      </span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
+            </div>) : null}</Fragment>)}
           </div>
         </div>
       </div>
-      <div id="clients" className="tt-section no-padding-bottom">
+</Fragment>) : section === "clients" ? (<Fragment><div id="clients" className="tt-section no-padding-bottom">
         <div className="tt-section-inner">
           <div className="tt-heading tt-heading-xlg tt-heading-center">
             <h3 className="tt-heading-subtitle tt-anim-lines">
-              {"( Trusted Partners )"}
+              {content.values["clients-1"]}
             </h3>
             <h2 className="tt-heading-title tt-anim-characters">
-              {"My Clients"}
+              {content.values["clients-2"]}
             </h2>
             <p className="max-width-700 tt-anim-lines">
-              {"Behind every project is a collaboration. I work closely with my clients to turn ideas into brands and websites that actually move their business forward."}
+              {content.values["clients-3"]}
             </p>
           </div>
         </div>
       </div>
-      <div className="tt-section padding-bottom-xlg-120">
+<div className="tt-section padding-bottom-xlg-120">
         <div className="tt-section-inner tt-wrap max-width-1800">
           <ul className="tt-logo-wall tt-lw-col-6 tt-lw-boxed tt-lw-tilted tt-anim-fadeinup">
-            <li>
-              <a href="https://themetorium.net/" className="tt-logo-wall-item cursor-alter" target="_blank" rel="noopener">
+            {content.collections["clients-items"].map(item => <Fragment key={item.id}>{item.template === "layout-1" ? (<li>
+              <a href={item.values["field-1"]} className="tt-logo-wall-item cursor-alter" target="_blank" rel="noopener">
                 <div className="tt-lv-item-inner">
-                  <img src="/assets/img/clients/client-1-light.png" className="tt-lv-img-light" loading="lazy" alt="Image" />
-                  <img src="/assets/img/clients/client-1-dark.png" className="tt-lv-img-dark" loading="lazy" alt="Image" />
+                  <img src={item.values["field-2"]} className="tt-lv-img-light" loading="lazy" alt={item.values["field-3"]} />
+                  <img src={item.values["field-4"]} className="tt-lv-img-dark" loading="lazy" alt={item.values["field-5"]} />
                 </div>
               </a>
-            </li>
-            <li>
-              <a href="https://themetorium.net/" className="tt-logo-wall-item cursor-alter" target="_blank" rel="noopener">
-                <div className="tt-lv-item-inner">
-                  <img src="/assets/img/clients/client-2-light.png" className="tt-lv-img-light" loading="lazy" alt="Image" />
-                  <img src="/assets/img/clients/client-2-dark.png" className="tt-lv-img-dark" loading="lazy" alt="Image" />
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="https://themetorium.net/" className="tt-logo-wall-item cursor-alter" target="_blank" rel="noopener">
-                <div className="tt-lv-item-inner">
-                  <img src="/assets/img/clients/client-3-light.png" className="tt-lv-img-light" loading="lazy" alt="Image" />
-                  <img src="/assets/img/clients/client-3-dark.png" className="tt-lv-img-dark" loading="lazy" alt="Image" />
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="https://themetorium.net/" className="tt-logo-wall-item cursor-alter" target="_blank" rel="noopener">
-                <div className="tt-lv-item-inner">
-                  <img src="/assets/img/clients/client-4-light.png" className="tt-lv-img-light" loading="lazy" alt="Image" />
-                  <img src="/assets/img/clients/client-4-dark.png" className="tt-lv-img-dark" loading="lazy" alt="Image" />
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="https://themetorium.net/" className="tt-logo-wall-item cursor-alter" target="_blank" rel="noopener">
-                <div className="tt-lv-item-inner">
-                  <img src="/assets/img/clients/client-5-light.png" className="tt-lv-img-light" loading="lazy" alt="Image" />
-                  <img src="/assets/img/clients/client-5-dark.png" className="tt-lv-img-dark" loading="lazy" alt="Image" />
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="https://themetorium.net/" className="tt-logo-wall-item cursor-alter" target="_blank" rel="noopener">
-                <div className="tt-lv-item-inner">
-                  <img src="/assets/img/clients/client-6-light.png" className="tt-lv-img-light" loading="lazy" alt="Image" />
-                  <img src="/assets/img/clients/client-6-dark.png" className="tt-lv-img-dark" loading="lazy" alt="Image" />
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="https://themetorium.net/" className="tt-logo-wall-item cursor-alter" target="_blank" rel="noopener">
-                <div className="tt-lv-item-inner">
-                  <img src="/assets/img/clients/client-7-light.png" className="tt-lv-img-light" loading="lazy" alt="Image" />
-                  <img src="/assets/img/clients/client-7-dark.png" className="tt-lv-img-dark" loading="lazy" alt="Image" />
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="https://themetorium.net/" className="tt-logo-wall-item cursor-alter" target="_blank" rel="noopener">
-                <div className="tt-lv-item-inner">
-                  <img src="/assets/img/clients/client-8-light.png" className="tt-lv-img-light" loading="lazy" alt="Image" />
-                  <img src="/assets/img/clients/client-8-dark.png" className="tt-lv-img-dark" loading="lazy" alt="Image" />
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="https://themetorium.net/" className="tt-logo-wall-item cursor-alter" target="_blank" rel="noopener">
-                <div className="tt-lv-item-inner">
-                  <img src="/assets/img/clients/client-9-light.png" className="tt-lv-img-light" loading="lazy" alt="Image" />
-                  <img src="/assets/img/clients/client-9-dark.png" className="tt-lv-img-dark" loading="lazy" alt="Image" />
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="https://themetorium.net/" className="tt-logo-wall-item cursor-alter" target="_blank" rel="noopener">
-                <div className="tt-lv-item-inner">
-                  <img src="/assets/img/clients/client-10-light.png" className="tt-lv-img-light" loading="lazy" alt="Image" />
-                  <img src="/assets/img/clients/client-10-dark.png" className="tt-lv-img-dark" loading="lazy" alt="Image" />
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="https://themetorium.net/" className="tt-logo-wall-item cursor-alter" target="_blank" rel="noopener">
-                <div className="tt-lv-item-inner">
-                  <img src="/assets/img/clients/client-11-light.png" className="tt-lv-img-light" loading="lazy" alt="Image" />
-                  <img src="/assets/img/clients/client-11-dark.png" className="tt-lv-img-dark" loading="lazy" alt="Image" />
-                </div>
-              </a>
-            </li>
-            <li>
-              <a href="https://themetorium.net/" className="tt-logo-wall-item cursor-alter" target="_blank" rel="noopener">
-                <div className="tt-lv-item-inner">
-                  <img src="/assets/img/clients/client-12-light.png" className="tt-lv-img-light" loading="lazy" alt="Image" />
-                  <img src="/assets/img/clients/client-12-dark.png" className="tt-lv-img-dark" loading="lazy" alt="Image" />
-                </div>
-              </a>
-            </li>
+            </li>) : null}</Fragment>)}
           </ul>
         </div>
       </div>
-      <div className="tt-section no-padding">
+</Fragment>) : section === "showreel" ? (<Fragment><div className="tt-section no-padding">
         <div className="tt-section-inner">
           <div className="tt-clipper">
-            <a href="/assets/vids/video-showreel/video-showreel.mp4" className="tt-clipper-inner" data-cursor="Play<br>Reel" data-fancybox="" data-caption="My project showreel.">
+            <a href={content.values["showreel-1"]} className="tt-clipper-inner" data-cursor={mediaLabel(content.values["extra-label-1"])} data-fancybox="" data-caption={mediaLabel(content.values["extra-label-2"])}>
               <div className="tt-clipper-bg">
-                <video loop={true} muted={true} autoPlay={true} playsInline={true} preload="metadata" poster="/assets/vids/video-showreel/video-showreel.jpg">
-                  <source src="/assets/vids/placeholder.mp4" data-src="/assets/vids/video-showreel/video-showreel.mp4" type="video/mp4" />
-                  <source src="/assets/vids/placeholder.webm" data-src="/assets/vids/video-showreel/video-showreel.webm" type="video/webm" />
+                <video loop={true} muted={true} autoPlay={true} playsInline={true} preload="metadata" poster={content.values["showreel-2"]}>
+                  <source src={content.values["showreel-3"]} data-src={content.values["showreel-4"]} type="video/mp4" />
+                  <source src={content.values["showreel-5"]} data-src={content.values["showreel-6"]} type="video/webm" />
                 </video>
               </div>
               <div className="tt-clipper-content">
                 <div className="tt-clipper-btn">
-                  <i className="fa-solid fa-play">
+                  <i className={content.values["showreel-7"]}>
 
                   </i>
                 </div>
@@ -675,16 +457,16 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
           </div>
         </div>
       </div>
-      <div id="about" className="tt-section">
+</Fragment>) : section === "about" ? (<Fragment><div id="about" className="tt-section">
         <div className="tt-section-inner tt-wrap">
           <div className="tt-row">
             <div className="tt-col-lg-7 tt-align-self-center">
               <div className="tt-heading tt-heading-lg">
                 <h3 className="tt-heading-subtitle tt-anim-lines">
-                  {"( Why Me? )"}
+                  {content.values["about-1"]}
                 </h3>
                 <h2 className="tt-heading-title tt-anim-lines">
-                  {"I am not just another developer, I am a creative partner invested in your success."}
+                  {content.values["about-2"]}
                 </h2>
               </div>
             </div>
@@ -693,18 +475,18 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
             </div>
             <div className="tt-col-lg-4 tt-align-self-center">
               <p className="tt-anim-lines">
-                {"From strategy to execution, I blend design thinking with full stack expertise to create work that's both beautiful and effective."}
+                {content.values["about-3"]}
               </p>
-              <a href="#clients" className="tt-btn tt-btn-secondary tt-magnetic-item tt-anim-fadeinup">
-                <span data-hover="My Clients">
-                  {"My Clients"}
+              <a href={content.values["about-4"]} className="tt-btn tt-btn-secondary tt-magnetic-item tt-anim-fadeinup">
+                <span data-hover={content.values["about-5"]}>
+                  {content.values["about-6"]}
                 </span>
               </a>
             </div>
           </div>
         </div>
       </div>
-      <div id="testimonials" className="tt-section">
+</Fragment>) : section === "testimonials" ? (<Fragment><div id="testimonials" className="tt-section">
         <div className="tt-section-inner tt-wrap max-width-1400">
           <div className="tt-sticker">
             <div className="tt-row tt-lg-row-reverse">
@@ -712,22 +494,22 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
                 <div className="tt-sticker-sticky tt-sticky-element">
                   <div className="tt-heading tt-heading-xlg">
                     <h3 className="tt-heading-subtitle tt-anim-lines">
-                      {"( Testimonials )"}
+                      {content.values["testimonials-1"]}
                     </h3>
                     <h2 className="tt-heading-title tt-anim-characters">
-                      {"What"}
+                      {content.values["testimonials-2"]}
                       <br />
-                      {" They"}
+                      {content.values["testimonials-3"]}
                       <br />
-                      {" Say"}
+                      {content.values["testimonials-4"]}
                     </h2>
                   </div>
                   <p className="tt-anim-lines">
-                    {"Genuine words from the people I have had the pleasure to work with."}
+                    {content.values["testimonials-5"]}
                   </p>
-                  <a href="#testimonials" className="tt-btn tt-btn-secondary tt-magnetic-item margin-top-20 tt-anim-fadeinup">
-                    <span data-hover="Read All Testimonials">
-                      {"Read All Testimonials"}
+                  <a href={content.values["testimonials-6"]} className="tt-btn tt-btn-secondary tt-magnetic-item margin-top-20 tt-anim-fadeinup">
+                    <span data-hover={content.values["testimonials-7"]}>
+                      {content.values["testimonials-8"]}
                     </span>
                   </a>
                 </div>
@@ -738,76 +520,20 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
               <div className="tt-col-lg-7">
                 <div className="tt-sticker-scroller">
                   <div className="tt-testimonials-list tt-tli-tilted tt-tli-lg">
-                    <div className="tt-testimonials-list-item tt-tli-reverse-color">
+                    {content.collections["testimonials-items"].map(item => <Fragment key={item.id}>{item.template === "layout-1" ? (<div className="tt-testimonials-list-item tt-tli-reverse-color">
                       <div className="tt-tli-inner">
                         <blockquote className="open-quote">
                           <cite>
-                            {"Shurov delivered a fast, responsive application with clean code, polished UI details, and a workflow that made every step clear."}
+                            {item.values["field-1"]}
                           </cite>
                           <footer>
-                            <a href="https://themetorium.net/" className="tt-link" target="_blank" rel="noopener">
-                              {"John Doe"}
+                            <a href={item.values["field-2"]} className="tt-link" target="_blank" rel="noopener">
+                              {item.values["field-3"]}
                             </a>
                           </footer>
                         </blockquote>
                       </div>
-                    </div>
-                    <div className="tt-testimonials-list-item tt-tli-reverse-color">
-                      <div className="tt-tli-inner">
-                        <blockquote className="open-quote">
-                          <cite>
-                            {"Excellent design sense and strong technical execution. The final product felt premium, flexible, and easy to manage after launch."}
-                          </cite>
-                          <footer>
-                            <a href="https://themetorium.net/" className="tt-link" target="_blank" rel="noopener">
-                              {"David Williams"}
-                            </a>
-                          </footer>
-                        </blockquote>
-                      </div>
-                    </div>
-                    <div className="tt-testimonials-list-item tt-tli-reverse-color">
-                      <div className="tt-tli-inner">
-                        <blockquote className="open-quote">
-                          <cite>
-                            {"The dashboard was built exactly around the project workflow, with fast loading times, smooth interactions, and excellent support."}
-                          </cite>
-                          <footer>
-                            <a href="https://themetorium.net/" className="tt-link" target="_blank" rel="noopener">
-                              {"Sarah Jones"}
-                            </a>
-                          </footer>
-                        </blockquote>
-                      </div>
-                    </div>
-                    <div className="tt-testimonials-list-item tt-tli-reverse-color">
-                      <div className="tt-tli-inner">
-                        <blockquote className="open-quote">
-                          <cite>
-                            {"Very thoughtful design, well organized code, and clear communication from planning through final delivery."}
-                          </cite>
-                          <footer>
-                            <a href="https://themetorium.net/" className="tt-link" target="_blank" rel="noopener">
-                              {"David Brown"}
-                            </a>
-                          </footer>
-                        </blockquote>
-                      </div>
-                    </div>
-                    <div className="tt-testimonials-list-item tt-tli-reverse-color">
-                      <div className="tt-tli-inner">
-                        <blockquote className="open-quote">
-                          <cite>
-                            {"I found a small issue on mobile and Shurov fixed it very quickly. I appreciated his care, speed, and attention to detail."}
-                          </cite>
-                          <footer>
-                            <a href="https://themetorium.net/" className="tt-link" target="_blank" rel="noopener">
-                              {"Olivia Bennett"}
-                            </a>
-                          </footer>
-                        </blockquote>
-                      </div>
-                    </div>
+                    </div>) : null}</Fragment>)}
                   </div>
                 </div>
               </div>
@@ -815,13 +541,13 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
           </div>
         </div>
       </div>
-      <div className="tt-section">
+</Fragment>) : section === "marquee" ? (<Fragment><div className="tt-section">
         <div className="tt-section-inner">
           <div className="tt-scrolling-text scrt-dyn-separator tt-scrt-tilted-2 tt-scrt-bordered" data-scroll-speed="10" data-change-direction="true">
             <div className="tt-scrt-inner">
               <div className="tt-scrt-content">
                 <div className="tt-scrt-text">
-                  {" Highly motivated "}
+                  {content.values["marquee-1"]}
                   <span className="tt-scrt-separator">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                       <path d="M13.025 1l-2.847 2.828 6.176 6.176h-16.354v3.992h16.354l-6.176 6.176 2.847 2.828 10.975-11z">
@@ -837,7 +563,7 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
             <div className="tt-scrt-inner">
               <div className="tt-scrt-content">
                 <div className="tt-scrt-text">
-                  {" Over 5 years of experience "}
+                  {content.values["marquee-2"]}
                   <span className="tt-scrt-separator">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                       <path d="M13.025 1l-2.847 2.828 6.176 6.176h-16.354v3.992h16.354l-6.176 6.176 2.847 2.828 10.975-11z">
@@ -851,16 +577,16 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
           </div>
         </div>
       </div>
-      <div className="tt-section no-padding-bottom">
+</Fragment>) : section === "highlights" ? (<Fragment><div className="tt-section no-padding-bottom">
         <div className="tt-section-inner tt-wrap">
           <div className="tt-row">
             <div className="tt-col-lg-7 tt-align-self-center">
               <div className="tt-heading tt-heading-xxxlg">
                 <h3 className="tt-heading-subtitle tt-anim-lines">
-                  {"( Highlights )"}
+                  {content.values["highlights-1"]}
                 </h3>
                 <h2 className="tt-heading-title tt-anim-characters">
-                  {"Stats"}
+                  {content.values["highlights-2"]}
                 </h2>
               </div>
             </div>
@@ -869,16 +595,16 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
             </div>
             <div className="tt-col-lg-4 tt-align-self-center">
               <p className="tt-anim-lines">
-                {"Key achievements and results that reflect professional growth, client success, and modern full stack expertise."}
+                {content.values["highlights-3"]}
               </p>
             </div>
           </div>
         </div>
       </div>
-      <div className="tt-section">
+<div className="tt-section">
         <div className="tt-section-inner">
           <div className="tt-avards-list tt-avlist-tilted">
-            <a href="https://themetorium.net/" className="tt-avlist-item cursor-alter tt-anim-fadeinup" target="_blank" rel="nofollow">
+            {content.collections["highlights-items"].map(item => <Fragment key={item.id}>{item.template === "layout-1" ? (<a href={item.values["field-1"]} className="tt-avlist-item cursor-alter tt-anim-fadeinup" target="_blank" rel="nofollow">
               <div className="tt-avlist-item-inner">
                 <div className="tt-avlist-col tt-avlist-col-count">
                   <div className="tt-avlist-count">
@@ -887,7 +613,7 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
                 </div>
                 <div className="tt-avlist-col tt-avlist-col-title">
                   <h3 className="tt-avlist-title">
-                    {"Professional Experience"}
+                    {item.values["field-2"]}
                   </h3>
                 </div>
                 <div className="tt-avlist-col tt-avlist-col-description">
@@ -897,182 +623,38 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
                 </div>
                 <div className="tt-avlist-col tt-avlist-col-info">
                   <div className="tt-avlist-info">
-                    {" 5+ Years "}
+                    {item.values["field-3"]}
                   </div>
                 </div>
               </div>
-            </a>
-            <a href="https://themetorium.net/" className="tt-avlist-item cursor-alter tt-anim-fadeinup" target="_blank" rel="nofollow">
-              <div className="tt-avlist-item-inner">
-                <div className="tt-avlist-col tt-avlist-col-count">
-                  <div className="tt-avlist-count">
-
-                  </div>
-                </div>
-                <div className="tt-avlist-col tt-avlist-col-title">
-                  <h3 className="tt-avlist-title">
-                    {"International Clients"}
-                  </h3>
-                </div>
-                <div className="tt-avlist-col tt-avlist-col-description">
-                  <div className="tt-avlist-description">
-
-                  </div>
-                </div>
-                <div className="tt-avlist-col tt-avlist-col-info">
-                  <div className="tt-avlist-info">
-                    {" 280+ "}
-                  </div>
-                </div>
-              </div>
-            </a>
-            <a href="https://themetorium.net/" className="tt-avlist-item cursor-alter tt-anim-fadeinup" target="_blank" rel="nofollow">
-              <div className="tt-avlist-item-inner">
-                <div className="tt-avlist-col tt-avlist-col-count">
-                  <div className="tt-avlist-count">
-
-                  </div>
-                </div>
-                <div className="tt-avlist-col tt-avlist-col-title">
-                  <h3 className="tt-avlist-title">
-                    {"Projects Delivered"}
-                  </h3>
-                </div>
-                <div className="tt-avlist-col tt-avlist-col-description">
-                  <div className="tt-avlist-description">
-
-                  </div>
-                </div>
-                <div className="tt-avlist-col tt-avlist-col-info">
-                  <div className="tt-avlist-info">
-                    {" 400+ "}
-                  </div>
-                </div>
-              </div>
-            </a>
-            <a href="https://themetorium.net/" className="tt-avlist-item cursor-alter tt-anim-fadeinup" target="_blank" rel="nofollow">
-              <div className="tt-avlist-item-inner">
-                <div className="tt-avlist-col tt-avlist-col-count">
-                  <div className="tt-avlist-count">
-
-                  </div>
-                </div>
-                <div className="tt-avlist-col tt-avlist-col-title">
-                  <h3 className="tt-avlist-title">
-                    {"Full Stack Expertise"}
-                  </h3>
-                </div>
-                <div className="tt-avlist-col tt-avlist-col-description">
-                  <div className="tt-avlist-description">
-
-                  </div>
-                </div>
-                <div className="tt-avlist-col tt-avlist-col-info">
-                  <div className="tt-avlist-info">
-                    {" Frontend + Backend "}
-                  </div>
-                </div>
-              </div>
-            </a>
-            <a href="https://themetorium.net/" className="tt-avlist-item cursor-alter tt-anim-fadeinup" target="_blank" rel="nofollow">
-              <div className="tt-avlist-item-inner">
-                <div className="tt-avlist-col tt-avlist-col-count">
-                  <div className="tt-avlist-count">
-
-                  </div>
-                </div>
-                <div className="tt-avlist-col tt-avlist-col-title">
-                  <h3 className="tt-avlist-title">
-                    {"Design Experience"}
-                  </h3>
-                </div>
-                <div className="tt-avlist-col tt-avlist-col-description">
-                  <div className="tt-avlist-description">
-
-                  </div>
-                </div>
-                <div className="tt-avlist-col tt-avlist-col-info">
-                  <div className="tt-avlist-info">
-                    {" UI/UX & Visual Design "}
-                  </div>
-                </div>
-              </div>
-            </a>
-            <a href="https://themetorium.net/" className="tt-avlist-item cursor-alter tt-anim-fadeinup" target="_blank" rel="nofollow">
-              <div className="tt-avlist-item-inner">
-                <div className="tt-avlist-col tt-avlist-col-count">
-                  <div className="tt-avlist-count">
-
-                  </div>
-                </div>
-                <div className="tt-avlist-col tt-avlist-col-title">
-                  <h3 className="tt-avlist-title">
-                    {"Team Collaboration"}
-                  </h3>
-                </div>
-                <div className="tt-avlist-col tt-avlist-col-description">
-                  <div className="tt-avlist-description">
-
-                  </div>
-                </div>
-                <div className="tt-avlist-col tt-avlist-col-info">
-                  <div className="tt-avlist-info">
-                    {" Agile Environment "}
-                  </div>
-                </div>
-              </div>
-            </a>
-            <a href="https://themetorium.net/" className="tt-avlist-item cursor-alter tt-anim-fadeinup" target="_blank" rel="nofollow">
-              <div className="tt-avlist-item-inner">
-                <div className="tt-avlist-col tt-avlist-col-count">
-                  <div className="tt-avlist-count">
-
-                  </div>
-                </div>
-                <div className="tt-avlist-col tt-avlist-col-title">
-                  <h3 className="tt-avlist-title">
-                    {"Continuous Learning"}
-                  </h3>
-                </div>
-                <div className="tt-avlist-col tt-avlist-col-description">
-                  <div className="tt-avlist-description">
-
-                  </div>
-                </div>
-                <div className="tt-avlist-col tt-avlist-col-info">
-                  <div className="tt-avlist-info">
-                    {" Modern Technologies "}
-                  </div>
-                </div>
-              </div>
-            </a>
+            </a>) : null}</Fragment>)}
           </div>
         </div>
       </div>
-      <div id="faq" className="tt-section">
+</Fragment>) : section === "faq" ? (<Fragment><div id="faq" className="tt-section">
         <div className="tt-section-inner tt-wrap max-width-1400">
           <div className="tt-heading tt-heading-xlg tt-heading-center margin-bottom-80">
             <h3 className="tt-heading-subtitle tt-anim-lines">
-              {"( Questions )"}
+              {content.values["faq-1"]}
             </h3>
             <h2 className="tt-heading-title tt-anim-characters">
-              {"Frequently Asked Questions"}
+              {content.values["faq-2"]}
             </h2>
             <div className="max-width-600" style={{"marginLeft":"auto","marginRight":"auto"} as CSSProperties}>
               <p className="tt-anim-lines">
-                {"Most frequently asked questions about my services and work process."}
+                {content.values["faq-3"]}
               </p>
             </div>
           </div>
           <div className="tt-row tt-justify-content-center">
             <div className="tt-col-lg-10">
               <div className="tt-accordion tt-acc-boxed tt-acc-counter tt-acc-tilted">
-                <div className="tt-accordion-item tt-anim-fadeinup">
+                {content.collections["faq-items"].map(item => <Fragment key={item.id}>{item.template === "layout-1" ? (<div className="tt-accordion-item tt-anim-fadeinup">
                   <div className="tt-accordion-heading">
                     <div className="tt-acc-head cursor-alter">
                       <div className="tt-acc-head-inner">
                         <h3 className="tt-acc-head-title">
-                          {"What kind of projects do you build?"}
+                          {item.values["field-1"]}
                         </h3>
                       </div>
                     </div>
@@ -1088,19 +670,18 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
                   </div>
                   <div className="tt-accordion-content max-width-1000">
                     <p>
-                      {"I build modern web applications, SaaS products, dashboards, business platforms, CMS systems, and enterprise tools using React.js, Next.js, TypeScript, JavaScript, Tailwind CSS, Redux, Express.js, NestJS, and modern database systems."}
+                      {item.values["field-2"]}
                     </p>
                     <p>
-                      {"I can also design and develop brand identities, UI/UX systems, Figma interfaces, landing pages, marketing assets, and complete digital products from concept to deployment."}
+                      {item.values["field-3"]}
                     </p>
                   </div>
-                </div>
-                <div className="tt-accordion-item tt-anim-fadeinup">
+                </div>) : item.template === "layout-2" ? (<div className="tt-accordion-item tt-anim-fadeinup">
                   <div className="tt-accordion-heading">
                     <div className="tt-acc-head cursor-alter">
                       <div className="tt-acc-head-inner">
                         <h3 className="tt-acc-head-title">
-                          {"What do you need to start a project?"}
+                          {item.values["field-1"]}
                         </h3>
                       </div>
                     </div>
@@ -1116,27 +697,26 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
                   </div>
                   <div className="tt-accordion-content max-width-1000">
                     <p>
-                      {"The basic project details that help me start smoothly are:"}
+                      {item.values["field-2"]}
                     </p>
                     <ul>
                       <li>
-                        {"A clear idea of your goals, audience, and main features"}
+                        {item.values["field-3"]}
                       </li>
                       <li>
-                        {"Any existing Figma design, brand assets, references, or content "}
+                        {item.values["field-4"]}
                       </li>
                       <li>
-                        {"Technical details such as preferred stack, integrations, timeline, and launch requirements"}
+                        {item.values["field-5"]}
                       </li>
                     </ul>
                   </div>
-                </div>
-                <div className="tt-accordion-item tt-anim-fadeinup">
+                </div>) : item.template === "layout-3" ? (<div className="tt-accordion-item tt-anim-fadeinup">
                   <div className="tt-accordion-heading">
                     <div className="tt-acc-head cursor-alter">
                       <div className="tt-acc-head-inner">
                         <h3 className="tt-acc-head-title">
-                          {"Will the website work across devices and browsers?"}
+                          {item.values["field-1"]}
                         </h3>
                       </div>
                     </div>
@@ -1152,58 +732,33 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
                   </div>
                   <div className="tt-accordion-content max-width-1000">
                     <p>
-                      {"Yes. I build responsive, optimized interfaces that work smoothly across modern devices and major browsers, including Chrome, Safari, Firefox, Edge, and mobile browsers."}
+                      {item.values["field-2"]}
                     </p>
                   </div>
-                </div>
-                <div className="tt-accordion-item tt-anim-fadeinup">
-                  <div className="tt-accordion-heading">
-                    <div className="tt-acc-head cursor-alter">
-                      <div className="tt-acc-head-inner">
-                        <h3 className="tt-acc-head-title">
-                          {"Do you provide support after delivery?"}
-                        </h3>
-                      </div>
-                    </div>
-                    <div className="tt-accordion-caret">
-                      <div className="tt-accordion-caret-inner tt-magnetic-item">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                          <path d="M13.025 1l-2.847 2.828 6.176 6.176h-16.354v3.992h16.354l-6.176 6.176 2.847 2.828 10.975-11z">
-
-                          </path>
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="tt-accordion-content max-width-1000">
-                    <p>
-                      {"Yes. I can provide post-launch fixes, improvements, performance tuning, new feature development, and ongoing technical support based on the project needs."}
-                    </p>
-                  </div>
-                </div>
+                </div>) : null}</Fragment>)}
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div className="tt-section padding-bottom-xlg-120">
+</Fragment>) : section === "creative-power" ? (<Fragment><div className="tt-section padding-bottom-xlg-120">
         <div className="tt-section-inner tt-wrap">
           <div className="tt-heading tt-heading-xxlg tt-heading-center">
             <h3 className="tt-heading-subtitle tt-anim-lines">
-              {"( Creative Power )"}
+              {content.values["creative-power-1"]}
             </h3>
             <h2 className="tt-heading-title">
-              <a href="#contact" className="tt-anim-characters" data-cursor="Contact">
-                {"Time to Make Boring Illegal"}
+              <a href={content.values["creative-power-2"]} className="tt-anim-characters" data-cursor={mediaLabel(content.values["extra-label-3"])}>
+                {content.values["creative-power-3"]}
               </a>
             </h2>
             <p className="tt-anim-lines">
-              {"Let’s make something great together."}
+              {content.values["creative-power-4"]}
             </p>
           </div>
         </div>
       </div>
-      <div id="contact" className="tt-section padding-top-40 padding-bottom-120">
+</Fragment>) : section === "contact" ? (<Fragment><div id="contact" className="tt-section padding-top-40 padding-bottom-120">
         <div className="tt-section-inner tt-wrap">
           <div className="tt-row tt-xl-row-reverse">
             <div className="tt-col-xl-5">
@@ -1252,24 +807,24 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
                   </div>
                   <div className="tt-heading tt-heading-lg">
                     <h2 className="tt-heading-title tt-anim-characters">
-                      {"Say Hi!"}
+                      {content.values["contact-1"]}
                     </h2>
                   </div>
                   <div className="margin-bottom-40">
                     <p className="tt-anim-lines">
-                      {"You're just one click away from taking your brand or product from great to incredible. Fill out the form to share more details about your project."}
+                      {content.values["contact-2"]}
                     </p>
                   </div>
                   <div className="margin-bottom-30 tt-anim-fadeinup">
                     <h3 className="tt-contact-info-heading">
-                      {"Contact Details"}
+                      {content.values["contact-3"]}
                     </h3>
                     <ul className="tt-list">
                       <li>
-                        <a href="https://www.google.com.au/maps/place/Envato+Pty+Ltd/@-37.8166193,144.968802,17z/data=!3m1!4b1!4m6!3m5!1s0x6ad65d4c2b349649:0xb6899234e561db11!8m2!3d-37.8166193!4d144.968802!16s%2Fg%2F1tfgjz3b?entry=ttu&g_ep=EgoyMDI1MDQzMC4xIKXMDSoASAFQAw%3D%3D" className="tt-link" target="_blank" rel="noopener">
-                          {" 180 Flinders St, Melbourne"}
+                        <a href={content.values["contact-4"]} className="tt-link" target="_blank" rel="noopener">
+                          {content.values["contact-5"]}
                           <br />
-                          {" Victoria, 3000 Australia "}
+                          {content.values["contact-6"]}
                         </a>
                       </li>
                     </ul>
@@ -1277,13 +832,13 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
                   <div className="margin-bottom-30 tt-anim-fadeinup">
                     <ul className="tt-list">
                       <li>
-                        <a href="tel:+123456789000" className="tt-link">
-                          {"+(123) 456 789 000"}
+                        <a href={content.values["contact-7"]} className="tt-link">
+                          {content.values["contact-8"]}
                         </a>
                       </li>
                       <li>
-                        <a href="mailto:company@email.com" className="tt-link">
-                          {"company@email.com"}
+                        <a href={content.values["contact-9"]} className="tt-link">
+                          {content.values["contact-10"]}
                         </a>
                       </li>
                     </ul>
@@ -1291,29 +846,29 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
                   <div className="tt-social-buttons tt-sbtn-inline tt-sbtn-filled tt-anim-fadeinup">
                     <ul>
                       <li>
-                        <a href="https://www.facebook.com/themetorium" className="tt-magnetic-item" target="_blank" rel="noopener">
-                          <i className="fa-brands fa-facebook-f">
+                        <a href={content.values["contact-11"]} className="tt-magnetic-item" target="_blank" rel="noopener">
+                          <i className={content.values["contact-12"]}>
 
                           </i>
                         </a>
                       </li>
                       <li>
-                        <a href="https://x.com/Themetorium" className="tt-magnetic-item" target="_blank" rel="noopener">
-                          <i className="fa-brands fa-x-twitter">
+                        <a href={content.values["contact-13"]} className="tt-magnetic-item" target="_blank" rel="noopener">
+                          <i className={content.values["contact-14"]}>
 
                           </i>
                         </a>
                       </li>
                       <li>
-                        <a href="https://dribbble.com/Themetorium" className="tt-magnetic-item" target="_blank" rel="noopener">
-                          <i className="fa-brands fa-dribbble">
+                        <a href={content.values["contact-15"]} className="tt-magnetic-item" target="_blank" rel="noopener">
+                          <i className={content.values["contact-16"]}>
 
                           </i>
                         </a>
                       </li>
                       <li>
-                        <a href="https://www.behance.net/Themetorium" className="tt-magnetic-item" target="_blank" rel="noopener">
-                          <i className="fa-brands fa-behance">
+                        <a href={content.values["contact-17"]} className="tt-magnetic-item" target="_blank" rel="noopener">
+                          <i className={content.values["contact-18"]}>
 
                           </i>
                         </a>
@@ -1330,7 +885,7 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
 
                   </div>
                   <div className="tt-cfm-close hide-cursor">
-                    <i className="fa-solid fa-xmark">
+                    <i className={content.values["contact-19"]}>
 
                     </i>
                   </div>
@@ -1338,71 +893,71 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
                 <div className="tt-contact-form-inner">
                   <div className="tt-form-group tt-anim-fadeinup">
                     <label htmlFor="sender-name">
-                      {"What's your name? "}
+                      {content.values["contact-20"]}
                       <span className="required">
-                        {"*"}
+                        {content.values["contact-21"]}
                       </span>
                     </label>
-                    <input className="tt-form-control" id="sender-name" type="text" name="name" placeholder="John Smith" required={true} />
+                    <input className="tt-form-control" id="sender-name" type="text" name="name" placeholder={content.values["contact-22"]} required={true} />
                   </div>
                   <div className="tt-form-group tt-anim-fadeinup">
                     <label htmlFor="sender-email">
-                      {"What's your email? "}
+                      {content.values["contact-23"]}
                       <span className="required">
-                        {"*"}
+                        {content.values["contact-24"]}
                       </span>
                     </label>
-                    <input className="tt-form-control" id="sender-email" type="email" name="email" placeholder="john@smith.com" required={true} />
+                    <input className="tt-form-control" id="sender-email" type="email" name="email" placeholder={content.values["contact-25"]} required={true} />
                   </div>
                   <div className="tt-form-group tt-anim-fadeinup">
                     <label htmlFor="sender-option">
-                      {"What would you like to talk about? "}
+                      {content.values["contact-26"]}
                       <span className="required">
-                        {"*"}
+                        {content.values["contact-27"]}
                       </span>
                     </label>
                     <select className="tt-form-control" id="sender-option" name="option" required={true} defaultValue="">
                       <option value="" disabled={true}>
-                        {"Please choose an option"}
+                        {content.values["contact-28"]}
                       </option>
-                      <option value="Say Hello">
-                        {"Say hello"}
+                      <option value={content.values["contact-29"] === "Say hello" ? "Say Hello" : content.values["contact-29"]}>
+                        {content.values["contact-29"]}
                       </option>
-                      <option value="New Project">
-                        {"New project"}
+                      <option value={content.values["contact-30"] === "New project" ? "New Project" : content.values["contact-30"]}>
+                        {content.values["contact-30"]}
                       </option>
-                      <option value="Feedback">
-                        {"Feedback"}
+                      <option value={content.values["contact-31"]}>
+                        {content.values["contact-31"]}
                       </option>
-                      <option value="Other">
-                        {"Other"}
+                      <option value={content.values["contact-32"]}>
+                        {content.values["contact-32"]}
                       </option>
                     </select>
                   </div>
                   <div className="tt-form-group tt-anim-fadeinup">
                     <label htmlFor="sender-message">
-                      {"Your message "}
+                      {content.values["contact-33"]}
                       <span className="required">
-                        {"*"}
+                        {content.values["contact-34"]}
                       </span>
                     </label>
-                    <textarea className="tt-form-control" id="sender-message" rows={5} name="message" placeholder="Hello, can you help me with ..." required={true}>
+                    <textarea className="tt-form-control" id="sender-message" rows={5} name="message" placeholder={content.values["contact-35"]} required={true}>
 
                     </textarea>
                   </div>
                   <div className="tt-form-check margin-top-30 margin-bottom-30 tt-anim-fadeinup">
                     <input type="checkbox" id="privacy-policy-check" required={true} />
                     <label htmlFor="privacy-policy-check" className="text-small">
-                      {"I have read and accept the "}
-                      <a href="/privacy" className="tt-link-2" target="_blank">
-                        {"privacy policy"}
+                      {content.values["contact-36"]}
+                      <a href={content.values["contact-37"]} className="tt-link-2" target="_blank">
+                        {content.values["contact-38"]}
                       </a>
-                      {"."}
+                      {content.values["contact-39"]}
                     </label>
                   </div>
                   <button type="submit" className="tt-btn tt-btn-secondary tt-btn-full tt-anim-fadeinup">
-                    <span data-hover="Send Message">
-                      {"Send Message"}
+                    <span data-hover={content.values["contact-40"]}>
+                      {content.values["contact-41"]}
                     </span>
                   </button>
                 </div>
@@ -1411,23 +966,23 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
           </div>
         </div>
       </div>
-    </div>
+</Fragment>) : null}</Fragment>)}</div>
     <footer id="tt-footer" className="border-top">
       <div className="tt-footer-inner">
         <div className="tt-row">
           <div className="tt-col-xxl-6 tt-col-xl-12">
             <div className="tt-footer-widget">
               <h2>
-                {"Ready to push"}
+                {shared.values["footer-cb8c2ac07c70"]}
                 <br />
-                {" beyond limits?"}
+                {shared.values["footer-61b47e5614a6"]}
               </h2>
-              <a href="#contact" className="tt-btn tt-btn-secondary tt-magnetic-item">
-                <span data-hover="Let's Connect">
-                  {"Let's Connect"}
+              <a href={shared.values["footer-200dc7c7426a"]} className="tt-btn tt-btn-secondary tt-magnetic-item">
+                <span data-hover={shared.values["footer-c0b1528f88e7"]}>
+                  {shared.values["footer-c0b1528f88e7"]}
                 </span>
                 <span className="tt-btn-icon">
-                  <i className="fa-regular fa-envelope">
+                  <i className={shared.values["footer-81cf3defa4db"]}>
 
                   </i>
                 </span>
@@ -1437,27 +992,27 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
           <div className="tt-col-xxl-2 tt-col-md-4">
             <div className="tt-footer-widget">
               <h3 className="tt-footer-widget-heading">
-                {"Links"}
+                {shared.values["footer-cf14c4413f01"]}
               </h3>
               <ul className="tt-footer-widget-list">
                 <li>
-                  <a href="#faq" className="tt-link">
-                    {"FAQ"}
+                  <a href={shared.values["footer-fe4a1d1d608b"]} className="tt-link">
+                    {shared.values["footer-95d7ac1de57e"]}
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="tt-link">
-                    {"Licenses"}
+                  <a href={shared.values["footer-2c8dce6c5ff4"]} className="tt-link">
+                    {shared.values["footer-70efe0187ebd"]}
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="tt-link">
-                    {"Terms of Use"}
+                  <a href={shared.values["footer-2c8dce6c5ff4"]} className="tt-link">
+                    {shared.values["footer-76bdf9eaeb77"]}
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="tt-link">
-                    {"Privacy Policy"}
+                  <a href={shared.values["footer-2c8dce6c5ff4"]} className="tt-link">
+                    {shared.values["footer-029947bf6809"]}
                   </a>
                 </li>
               </ul>
@@ -1466,22 +1021,22 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
           <div className="tt-col-xxl-2 tt-col-md-4">
             <div className="tt-footer-widget">
               <h3 className="tt-footer-widget-heading">
-                {"Sitemap"}
+                {shared.values["footer-8ca86e79b7d3"]}
               </h3>
               <ul className="tt-footer-widget-list">
                 <li>
-                  <a href="#about" className="tt-link">
-                    {"About Me"}
+                  <a href={shared.values["footer-3dfe9ad6b2b0"]} className="tt-link">
+                    {shared.values["footer-87e499d8b006"]}
                   </a>
                 </li>
                 <li>
-                  <a href="#portfolio" className="tt-link">
-                    {"Portfolio"}
+                  <a href={shared.values["footer-8c2d9d4dddbc"]} className="tt-link">
+                    {shared.values["footer-da4deec83426"]}
                   </a>
                 </li>
                 <li>
-                  <a href="#services" className="tt-link">
-                    {"Services"}
+                  <a href={shared.values["footer-80edc576f931"]} className="tt-link">
+                    {shared.values["footer-b67954d42188"]}
                   </a>
                 </li>
               </ul>
@@ -1490,24 +1045,24 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
           <div className="tt-col-xxl-2 tt-col-md-4">
             <div className="tt-footer-widget">
               <h3 className="tt-footer-widget-heading">
-                {"Contact"}
+                {shared.values["footer-e349bf04f7ac"]}
               </h3>
               <ul className="tt-footer-widget-list">
                 <li>
-                  <a href="https://www.google.com.au/maps/place/Envato+Pty+Ltd/@-37.8166193,144.968802,17z/data=!3m1!4b1!4m6!3m5!1s0x6ad65d4c2b349649:0xb6899234e561db11!8m2!3d-37.8166193!4d144.968802!16s%2Fg%2F1tfgjz3b?entry=ttu&g_ep=EgoyMDI1MDQzMC4xIKXMDSoASAFQAw%3D%3D" className="tt-link" target="_blank" rel="nofollow noopener">
-                    {" 180 Flinders St, Melbourne"}
+                  <a href={shared.values["footer-3bb8ce93f8ab"]} className="tt-link" target="_blank" rel="nofollow noopener">
+                    {shared.values["footer-35d4c98f0160"]}
                     <br />
-                    {" Victoria, 3000 Australia "}
+                    {shared.values["footer-20f933f5d168"]}
                   </a>
                 </li>
                 <li>
-                  <a href="mailto:company@email.com" className="tt-link">
-                    {"company@email.com"}
+                  <a href={shared.values["footer-63b02315c6ed"]} className="tt-link">
+                    {shared.values["footer-535e907a97dd"]}
                   </a>
                 </li>
                 <li>
-                  <a href="tel:+(123)456789000" className="tt-link">
-                    {" +(123) 456 789 000"}
+                  <a href={shared.values["footer-52aa2eab88fe"]} className="tt-link">
+                    {shared.values["footer-5d4801a31e83"]}
                   </a>
                 </li>
               </ul>
@@ -1521,29 +1076,29 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
                 <div className="tt-social-buttons tt-sbtn-inline tt-sbtn-filled">
                   <ul>
                     <li>
-                      <a href="https://www.facebook.com/themetorium" className="tt-magnetic-item" target="_blank" rel="noopener">
-                        <i className="fa-brands fa-facebook-f">
+                      <a href={shared.values["footer-1bc54fe4a43c"]} className="tt-magnetic-item" target="_blank" rel="noopener">
+                        <i className={shared.values["footer-b66d446bf1da"]}>
 
                         </i>
                       </a>
                     </li>
                     <li>
-                      <a href="https://x.com/Themetorium" className="tt-magnetic-item" target="_blank" rel="noopener">
-                        <i className="fa-brands fa-x-twitter">
+                      <a href={shared.values["footer-eb6eda3afead"]} className="tt-magnetic-item" target="_blank" rel="noopener">
+                        <i className={shared.values["footer-3d56b0bfe9a9"]}>
 
                         </i>
                       </a>
                     </li>
                     <li>
-                      <a href="https://dribbble.com/Themetorium" className="tt-magnetic-item" target="_blank" rel="noopener">
-                        <i className="fa-brands fa-dribbble">
+                      <a href={shared.values["footer-917544815758"]} className="tt-magnetic-item" target="_blank" rel="noopener">
+                        <i className={shared.values["footer-72b624c19e56"]}>
 
                         </i>
                       </a>
                     </li>
                     <li>
-                      <a href="https://www.behance.net/Themetorium" className="tt-magnetic-item" target="_blank" rel="noopener">
-                        <i className="fa-brands fa-behance">
+                      <a href={shared.values["footer-312e058b5781"]} className="tt-magnetic-item" target="_blank" rel="noopener">
+                        <i className={shared.values["footer-6c1c7e0eec53"]}>
 
                         </i>
                       </a>
@@ -1554,8 +1109,8 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
             </div>
             <div className="tt-col-md-4 tt-align-items-md-end tt-justify-content-md-center">
               <div className="tt-footer-widget text-center-to-md">
-                {" Made with "}
-                <i className="fa-regular fa-heart">
+                {shared.values["footer-54804282e5c1"]}
+                <i className={shared.values["footer-625d10082fcc"]}>
 
                 </i>
               </div>
@@ -1563,15 +1118,15 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
             <div className="tt-col-md-4 tt-align-items-md-end">
               <div className="tt-footer-widget">
                 <div className="tt-footer-copyright">
-                  {" ©"}
+                  {shared.values["footer-94aebbfc88a6"]}
                   <span className="tt-copyright-year">
 
                   </span>
-                  <a href="https://themetorium.net/" className="tt-link" target="_blank" rel="nofollow noopener">
-                    {"Themetorium.net"}
+                  <a href={shared.values["footer-bfab07f92c83"]} className="tt-link" target="_blank" rel="nofollow noopener">
+                    {shared.values["footer-e70e263c9598"]}
                   </a>
                   <br />
-                  {" All Rights Reserved "}
+                  {shared.values["footer-66a167229d37"]}
                 </div>
               </div>
             </div>
@@ -1581,7 +1136,7 @@ export default function PortfolioHome({ projects }: { projects: Project[] }) {
     </footer>
   </div>
   <div className="tt-scroll-to-top" data-top-offset="800" data-bottom-offset="200">
-    <a href="#" className="tt-stt-inner tt-magnetic-item">
+    <a href={content.values["footer-1"]} className="tt-stt-inner tt-magnetic-item">
       <div className="tt-stt-arrow">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
           <path d="M13.025 1l-2.847 2.828 6.176 6.176h-16.354v3.992h16.354l-6.176 6.176 2.847 2.828 10.975-11z">
