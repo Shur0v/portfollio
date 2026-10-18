@@ -11,13 +11,15 @@
     "test:db": "node --test tests/database.test.mjs",
     "db:local": "node scripts/local-postgres.mjs",
     "db:setup": "node scripts/database-setup.mjs",
-    "db:check": "node scripts/database-check.mjs"
+    "db:check": "node scripts/database-check.mjs",
+    "admin:setup": "node scripts/admin-setup.mjs"
   },
   "dependencies": {
     "next": "^15.5.27",
     "pg": "^8.23.1",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "sharp": "^0.35.5"
   },
   "overrides": {
     "postcss": "^8.5.28"

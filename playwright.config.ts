@@ -20,9 +20,9 @@ export default defineConfig({
   webServer: [
     {
       command: "node scripts/test-server.mjs",
-      url: "http://localhost:3100/dashboard/login",
+      url: "http://localhost:3100/admin",
       timeout: 180000,
-      env: { ADMIN_PASSWORD: "test-only-password-2026", SESSION_SECRET: "test-only-session-secret-at-least-thirty-two-characters", APP_ORIGIN: "http://localhost:3100", PORTFOLIO_DATA_DIR: testStorage },
+      env: { ADMIN_USERNAME: "test-admin", ADMIN_ROUTE_KEY: "a".repeat(64), ADMIN_PASSWORD: "test-only-password-2026", SESSION_SECRET: "test-only-session-secret-at-least-thirty-two-characters", APP_ORIGIN: "http://localhost:3100", PORTFOLIO_DATA_DIR: testStorage },
     },
     { command: "node scripts/reference-server.mjs", url: "http://127.0.0.1:3101", timeout: 15000 },
   ],

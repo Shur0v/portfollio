@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 import { authorizeMutation } from "../../../lib/auth";
 import { dataDirectory } from "../../../lib/storage";
 import { readLimitedBody } from "../../../lib/request-body";
+import { optimizeImage } from "../../../lib/optimize-image";
 
 export async function POST(request: Request) {
   if (!await authorizeMutation(request)) return NextResponse.json({ error: "Please sign in." }, { status: 401 });
@@ -21,10 +22,11 @@ export async function POST(request: Request) {
     else if (["GIF87a", "GIF89a"].includes(buffer.toString("ascii", 0, 6))) extension = "gif";
     else if (buffer.toString("ascii", 0, 4) === "RIFF" && buffer.toString("ascii", 8, 12) === "WEBP") extension = "webp";
     if (!extension) throw new Error("Only JPG, PNG, GIF, and WebP images are supported.");
-    const filename = `${randomUUID()}.${extension}`;
+    const optimized = await optimizeImage(buffer);
+    const filename = `${randomUUID()}.webp`;
     await mkdir(path.join(dataDirectory, "uploads"), { recursive: true });
-    await writeFile(path.join(dataDirectory, "uploads", filename), buffer, { flag: "wx" });
-    return NextResponse.json({ url: `/media/${filename}` }, { status: 201 });
+    await writeFile(path.join(dataDirectory, "uploads", filename), optimized, { flag: "wx" });
+    return NextResponse.json({ url: `/media/${filename}`, bytes: optimized.length, originalBytes: buffer.length, format: "webp" }, { status: 201 });
   } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : "Upload failed." }, { status: 400 });
   }

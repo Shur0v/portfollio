@@ -2,6 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import { getProject, getProjects } from "../../../../lib/projects";
 import { cache } from "react";
+import { getContentRevision } from "../../../../lib/content-revision";
 import Project1 from "../../../../components/projects/project-1";
 import Project2 from "../../../../components/projects/project-2";
 import Project3 from "../../../../components/projects/project-3";
@@ -17,6 +18,7 @@ export const dynamic = "force-dynamic";
 type Props = { params: Promise<{ slug: string }> };
 
 const loadProject = cache(async (slug: string) => {
+  await getContentRevision();
   const project = await getProject(slug);
   if (!project) notFound();
   if (project.slug !== slug) redirect(`/projects/${project.slug}`);

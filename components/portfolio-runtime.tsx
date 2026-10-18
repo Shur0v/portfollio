@@ -31,6 +31,14 @@ export function usePortfolioRuntime() {
         });
       }
       if (document.readyState === "complete") window.dispatchEvent(new Event("load"));
+      const savedScroll = sessionStorage.getItem("portfolio-live-scroll");
+      if (savedScroll) {
+        sessionStorage.removeItem("portfolio-live-scroll");
+        try {
+          const saved = JSON.parse(savedScroll);
+          if (saved.path === location.pathname && Number.isFinite(saved.scroll)) window.scrollTo(0, saved.scroll);
+        } catch { }
+      }
     })();
     initialization.catch(error => {
       console.error(error);

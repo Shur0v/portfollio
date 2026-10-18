@@ -39,6 +39,8 @@ Set the following values. Replace both example values with your own; do not use 
 
 ```dotenv
 ADMIN_PASSWORD=your-unique-password-at-least-16-characters
+ADMIN_USERNAME=your-login-id
+ADMIN_ROUTE_KEY=your-random-64-character-hex-route-key
 SESSION_SECRET=your-generated-random-secret
 DATABASE_URL=postgresql://username:password@127.0.0.1:5432/portfolio
 PORTFOLIO_DATA_DIR=./storage
@@ -50,7 +52,7 @@ Generate the session secret in PowerShell:
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
-Paste the output after `SESSION_SECRET=` and save the file. The password needs at least 16 characters; the secret needs at least 32 characters. Keep `.env.local` private. Sign-in stays disabled until both are configured. Leave `APP_ORIGIN` unset for local development so the app uses its current origin. Restart the server after changing environment variables.
+For automatic secure setup, run `npm run admin:setup`. It generates a unique admin password, session secret, and unpredictable 64-hex-character route key while preserving existing valid settings. Read your ID/password and `ADMIN_ROUTE_KEY` privately in `.env.local`. Sign-in requires all four admin settings. Never commit or publish these values. Leave `APP_ORIGIN` unset for local development; restart the server after configuration changes. Changing the ID, password, route key, or session secret invalidates old sessions.
 
 ### 3b. Start PostgreSQL and initialize the database
 
@@ -84,10 +86,11 @@ npm run dev
 Keep the terminal open and wait until Next.js prints `Ready`. Open these addresses in your browser:
 
 - Portfolio: `http://localhost:3000`
-- Dashboard: `http://localhost:3000/dashboard`
-- Contact inbox: `http://localhost:3000/dashboard/messages`
+- Real login: `http://localhost:3000/studio/<ADMIN_ROUTE_KEY>/login`
+- Projects: `http://localhost:3000/studio/<ADMIN_ROUTE_KEY>`
+- Contact inbox: `http://localhost:3000/studio/<ADMIN_ROUTE_KEY>/messages`
 
-Sign in with the value of `ADMIN_PASSWORD`. Source edits reload automatically in development. Press **Ctrl+C** in the terminal to stop the server.
+Replace `<ADMIN_ROUTE_KEY>` with the actual private key saved in `.env.local`. Sign in using `ADMIN_USERNAME` and `ADMIN_PASSWORD`. Source edits reload automatically in development. Press **Ctrl+C** to stop the server.
 
 If port 3000 is already being used, choose a different port and use it in your browser:
 
@@ -99,7 +102,7 @@ The first page visit compiles its development route and can take longer than lat
 
 ### 5. Upload and publish projects
 
-In the dashboard, click **New project**. Enter a title and URL slug, choose a category, add the description, and upload a cover image. You can also upload a hero image and up to 20 gallery images. Supported formats are JPG, PNG, GIF, and WebP, with a 10 MB limit for each image.
+In the dashboard, click **New project**. Enter a title and URL slug, choose a category, add the description, and upload a cover image. You can also upload a hero image and up to 20 gallery images. JPG, PNG, GIF, and WebP inputs up to 10 MB are decoded and converted to WebP, resized within 1920 × 1920 without upscaling, and compressed at quality 78. Saved files must be at most 2 MB; larger results are rejected with a helpful message. Transparency and animation are preserved where supported, with a 120-frame and 40-megapixel decode limit. EXIF metadata is removed. Original template assets are unchanged. Tiny inputs can be smaller than their WebP encoding; a universally smaller byte count is not guaranteed.
 
 Click **Save project** while **Published** is unchecked to keep the project as a draft. Check **Published** and save again to show it on the portfolio. Lower display-order numbers appear first. Select an existing project to edit it. Uploaded images and saved content persist across server restarts.
 
@@ -129,7 +132,7 @@ The browser tests require Microsoft Edge and use ports 3100, 3101, and 3102. The
 
 Create, edit, delete, order, draft, and publish projects. Upload cover images, hero images, and gallery images (JPG, PNG, GIF, WebP; 10 MB per file). Existing case studies preserve their original TSX layouts and media; the dashboard edits their main project information and appends uploaded gallery images. New projects use a matching case-study layout. The original repeated grid cards and additional category filters remain editable.
 
-Contact submissions appear at `/dashboard/messages`. Messages are stored in the inbox; email delivery is not configured.
+Contact submissions appear at `/studio/<ADMIN_ROUTE_KEY>/messages`. Messages are stored in PostgreSQL; email delivery is not configured.
 
 ### Customization coverage
 
@@ -137,7 +140,9 @@ The dashboard is a project manager and contact inbox, not a full landing-page CM
 
 Profile name, avatar, biography, homepage hero, services, client logos, testimonials, Highlights, FAQ, Creative Power, contact details, social links, navigation, footer, and SEO metadata do not currently have dashboard editors. There is no admin avatar/account-profile editor either. These require source edits until a site-content management feature is implemented. The dashboard uses its own responsive dark interface; the original design refers to the public portfolio, not a matching admin-page template.
 
-Dashboard login is `/dashboard/login`, project management is `/dashboard`, and the protected inbox is `/dashboard/messages`. Use the configured `ADMIN_PASSWORD`; no default username or password is shipped. Local sign-in remains disabled until `.env.local` or equivalent server environment variables configure both required secrets.
+Real admin access is exclusively under `/studio/<ADMIN_ROUTE_KEY>`. `/admin`, `/dashboard`, `/login`, `/wp-admin`, `/wp-login.php`, and their covered child routes are decoy pages: submitting any values shows a brief checking state and the requested access-denied hand icon. Decoys never submit or store credentials, issue an admin session, redirect to, or expose the real route. The old `/api/session` endpoint no longer exists. The real session endpoint requires the private route key, ID/password, same-origin validation, and rate limiting; the unpredictable path is an extra layer, not a replacement for authentication.
+
+Published project edits increment a PostgreSQL revision through a database trigger. Open public pages check every 10 seconds and on focus, then reload fresh server-rendered content without rebuilding. The current theme and scroll position are preserved, and active/filled contact forms defer reload to avoid losing visitor input. Direct PostgreSQL updates to published project payloads also trigger refresh. Draft-only edits stay private. Hardcoded homepage/case-study sections still require source edits, as explained above; this does not add a full landing-page CMS.
 
 ## Source structure
 
@@ -146,10 +151,12 @@ Dashboard login is `/dashboard/login`, project management is `/dashboard`, and t
 - `components/projects` — all original case studies and the uploaded-project layout.
 - `components/project-grid.tsx` — project cards, driven by dashboard data.
 - `components/portfolio-runtime.tsx` — ordered initialization of the original animation libraries after React hydration.
-- `app/dashboard` and `components/dashboard` — Tailwind dashboard.
+- `app/studio/[key]` and `components/dashboard` — protected Tailwind dashboard; common login routes render decoys.
 - `app/api` — authenticated project management, upload, sign-in, and contact endpoints.
 - `lib/database.ts`, `lib/projects.ts`, `lib/messages.ts` — pooled PostgreSQL queries and transactional project writes.
 - `database/001-initial.sql` — schema, unique project URLs, and query indexes.
+- `database/002-live-content.sql` — published-content revision trigger and safe, versioned upgrade.
+- `lib/optimize-image.ts` — real decoding and bounded WebP compression of new uploads.
 - `data/projects.seed.json` — initial project content, imported once during database setup.
 - `public/assets` — original images, fonts, CSS, and animation scripts.
 - `storage` — uploaded media and preserved legacy JSON, excluded from Git; not the live database.
@@ -179,6 +186,10 @@ Verified on October 4, 2026: TypeScript checking and the production build pass, 
 Rechecked on October 11, 2026: TypeScript checking, production build, and all five existing browser checks pass. The added dashboard login/protected-route/search/responsive-editor/logout test also passes on its focused rerun after correcting a test selector that matched Next.js's route announcer. Dashboard screenshots and horizontal-overflow checks cover 1440px, 768px, and 390px. This verifies the implemented project manager, not the missing full-profile/landing-page CMS described above.
 
 PostgreSQL migration verified on October 11, 2026: the local PostgreSQL 18.4 server is reachable, uses UTF8, and contains the original nine projects. TypeScript and production build pass; the database migration/rollback/Unicode/index/idempotency/restart test passes; all six browser tests pass together against an isolated PostgreSQL database. The production dependency audit reports zero vulnerabilities. Public layout comparisons still pass at all three widths in both themes.
+
+Rechecked on October 18, 2026: TypeScript checking, production build, the PostgreSQL migration/restart test, and all eight Microsoft Edge browser tests pass. The added checks cover private admin login, decoy routes, WebP conversion and resizing, and automatic refresh of already-open public project pages after published corrections. These are local checks; they do not establish that the VPS has been deployed or turn the project dashboard into a full-site CMS.
+
+For deployment on the existing multi-project VPS, see `deploy/README.md`. The templates are isolated additions, not a claim that the VPS is already deployed. SSH access, the domain's corrected DNS record, a free app port, existing proxy configuration checks, and HTTPS verification are required first.
 
 ```sh
 npm run typecheck

@@ -5,7 +5,7 @@ import type { Project } from "../../lib/project-types";
 
 const emptyProject = (): Project => ({ id: "", slug: "", title: "", category: "Digital", image: "", heroImage: "", description: "", client: "", year: String(new Date().getFullYear()), role: "", website: "", portrait: false, published: false, order: 10, template: 0, video: [], gallery: [] });
 
-export function ProjectDashboard({ initialProjects }: { initialProjects: Project[] }) {
+export function ProjectDashboard({ initialProjects, basePath }: { initialProjects: Project[]; basePath: string }) {
   const [projects, setProjects] = useState(initialProjects);
   const [draft, setDraft] = useState<Project | null>(null);
   const [busy, setBusy] = useState(false);
@@ -37,7 +37,7 @@ export function ProjectDashboard({ initialProjects }: { initialProjects: Project
       if (!response.ok) throw new Error(result.error);
       setProjects(current => [...current.filter(project => project.id !== result.project.id), result.project].sort((left, right) => left.order - right.order));
       setDraft(result.project); setDirty(false);
-      setMessage(result.project.published ? "Project saved and published." : "Draft saved. It is hidden from the portfolio.");
+      setMessage(result.project.published ? "Project saved and published. Open portfolio pages update automatically within 10 seconds." : "Draft saved. It is hidden from the portfolio.");
     } catch (error) { setError(error instanceof Error ? error.message : "Save failed."); }
     finally { setBusy(false); }
   }
@@ -78,8 +78,8 @@ export function ProjectDashboard({ initialProjects }: { initialProjects: Project
 
   async function logout() {
     if (dirty && !window.confirm("Sign out and discard your unsaved changes?")) return;
-    await fetch("/api/session", { method: "DELETE" });
-    window.location.assign("/dashboard/login");
+    await fetch(`${basePath}/session`, { method: "DELETE" });
+    window.location.assign(`${basePath}/login`);
   }
 
   return <>
@@ -96,7 +96,7 @@ export function ProjectDashboard({ initialProjects }: { initialProjects: Project
             <span className="tw:flex tw:items-center tw:gap-3"><img src={project.image} alt="" className="tw:h-12 tw:w-12 tw:rounded tw:object-cover" /><span><strong className="tw:block">{project.title}</strong><span className="tw:text-xs tw:text-zinc-400">{project.category} · {project.published ? "Published" : "Draft"}</span></span></span>
           </button>)}
         </div>
-        <a className="button tw:mt-6" href="/dashboard/messages">Contact messages</a>
+        <a className="button tw:mt-6" href={`${basePath}/messages`}>Contact messages</a>
       </aside>
       <section>
         {error && <p role="alert" className="tw:rounded-lg tw:bg-red-950 tw:p-4 tw:text-red-200">{error}</p>}
@@ -116,7 +116,7 @@ export function ProjectDashboard({ initialProjects }: { initialProjects: Project
                 {([['client', 'Client'], ['year', 'Year'], ['role', 'Your role'], ['website', 'Website URL']] as const).map(([field, label]) => <label key={field}>{label}<input type={field === "website" ? "url" : "text"} value={draft[field]} onChange={event => change(field, event.target.value)} /></label>)}
               </div>
               <div className="tw:grid tw:gap-5 tw:sm:grid-cols-2">
-                {([['image', 'Cover image'], ['heroImage', 'Hero image (optional)']] as const).map(([field, label]) => <label key={field}>{label}{draft[field] && <img src={draft[field]} alt={label} className="tw:mt-3 tw:h-40 tw:w-full tw:rounded-lg tw:object-cover" />}<input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={event => { void upload(event.target.files, field); event.target.value = ""; }} /><span className="tw:text-xs tw:text-zinc-400">JPG, PNG, WebP or GIF · up to 10 MB</span></label>)}
+                {([['image', 'Cover image'], ['heroImage', 'Hero image (optional)']] as const).map(([field, label]) => <label key={field}>{label}{draft[field] && <img src={draft[field]} alt={label} className="tw:mt-3 tw:h-40 tw:w-full tw:rounded-lg tw:object-cover" />}<input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={event => { void upload(event.target.files, field); event.target.value = ""; }} /><span className="tw:text-xs tw:text-zinc-400">JPG, PNG, WebP or GIF · up to 10 MB input · compressed to WebP (max 2 MB)</span></label>)}
               </div>
               <label>Gallery images (up to 20)<input type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple onChange={event => { void upload(event.target.files, "gallery"); event.target.value = ""; }} /></label>
               <div className="tw:grid tw:grid-cols-2 tw:gap-3 tw:sm:grid-cols-3">{draft.gallery?.map((image, index) => <div key={image + index}><img src={image} alt={`Gallery ${index + 1}`} className="tw:h-24 tw:w-full tw:object-cover" /><button type="button" onClick={() => change("gallery", draft.gallery!.filter((_, position) => index !== position))}>Remove image {index + 1}</button></div>)}</div>

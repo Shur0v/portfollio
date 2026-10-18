@@ -5,7 +5,12 @@ export const sessionCookie = "portfolio-session";
 export const sessionAge = 60 * 60 * 12;
 
 export function authConfigured() {
-  return (process.env.ADMIN_PASSWORD?.length || 0) >= 16 && (process.env.SESSION_SECRET?.length || 0) >= 32;
+  return !!process.env.ADMIN_USERNAME && (process.env.ADMIN_PASSWORD?.length || 0) >= 16 && (process.env.SESSION_SECRET?.length || 0) >= 32 && /^[a-f0-9]{64}$/.test(process.env.ADMIN_ROUTE_KEY || "");
+}
+
+export function matchesUsername(username: string) {
+  if (!authConfigured()) return false;
+  return timingSafeEqual(createHash("sha256").update(username).digest(), createHash("sha256").update(process.env.ADMIN_USERNAME!).digest());
 }
 
 export function matchesPassword(password: string) {
@@ -14,7 +19,7 @@ export function matchesPassword(password: string) {
 }
 
 function signature(payload: string) {
-  return createHmac("sha256", process.env.SESSION_SECRET!).update(payload).digest("hex");
+  return createHmac("sha256", process.env.SESSION_SECRET!).update(`${process.env.ADMIN_USERNAME}.${process.env.ADMIN_ROUTE_KEY}.${createHash("sha256").update(process.env.ADMIN_PASSWORD!).digest("hex")}.${payload}`).digest("hex");
 }
 
 export function createSession() {

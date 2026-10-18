@@ -36,6 +36,13 @@ test("PostgreSQL migration is atomic, imports JSON once, enforces indexes, and s
     assert.deepEqual(await setupDatabase(connectionString, legacy), { initialized: true, projects: 1, messages: 1 });
     assert.equal((await client.query("SELECT payload FROM portfolio_projects")).rows[0].payload.title, project.title);
     assert.equal((await client.query("SELECT message FROM portfolio_messages")).rows[0].message, message.message);
+    const revision = Number((await client.query("SELECT revision FROM portfolio_content_revision")).rows[0].revision);
+    await client.query("UPDATE portfolio_projects SET payload = jsonb_set(payload, '{title}', to_jsonb($1::text)) WHERE id = $2", ["Corrected database line", project.id]);
+    assert.equal(Number((await client.query("SELECT revision FROM portfolio_content_revision")).rows[0].revision), revision + 1);
+    await client.query("UPDATE portfolio_projects SET payload = jsonb_set(payload, '{published}', 'false'::jsonb) WHERE id = $1", [project.id]);
+    const draftRevision = Number((await client.query("SELECT revision FROM portfolio_content_revision")).rows[0].revision);
+    await client.query("UPDATE portfolio_projects SET payload = jsonb_set(payload, '{title}', to_jsonb($1::text)) WHERE id = $2", ["Private draft correction", project.id]);
+    assert.equal(Number((await client.query("SELECT revision FROM portfolio_content_revision")).rows[0].revision), draftRevision);
     const repeated = await Promise.all([setupDatabase(connectionString, legacy), setupDatabase(connectionString, legacy)]);
     assert.ok(repeated.every(result => result.initialized === false));
     const indexes = await client.query("SELECT indexname FROM pg_indexes WHERE tablename IN ('portfolio_projects', 'portfolio_messages')");

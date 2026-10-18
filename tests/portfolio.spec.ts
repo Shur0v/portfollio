@@ -3,9 +3,16 @@ import { spawn } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { Client } from "pg";
+import sharp from "sharp";
 import seed from "../data/projects.seed.json";
 
 const testImage = { name: "cover.png", mimeType: "image/png", buffer: Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aD1sAAAAASUVORK5CYII=", "base64") };
+
+const adminBase = `/studio/${"a".repeat(64)}`;
+const adminLogin = `${adminBase}/login`;
+const adminMessages = `${adminBase}/messages`;
+
+test.beforeAll(async () => { testImage.buffer = await sharp({ create: { width: 64, height: 64, channels: 4, background: { r: 40, g: 100, b: 180, alpha: 1 } } }).png().toBuffer(); });
 
 const pageErrors = new WeakMap<Page, string[]>();
 
@@ -136,11 +143,12 @@ test("all nine case studies render TSX pages", async ({ page }) => {
 test("protected project CRUD, upload, publishing, and contact inbox", async ({ page, request }) => {
   const rejected = await request.post("/api/projects", { data: {}, headers: { origin: "http://localhost:3100" } });
   expect(rejected.status()).toBe(401);
-  await page.goto("/dashboard");
-  await expect(page).toHaveURL(/\/dashboard\/login/);
+  await page.goto(adminBase);
+  await expect(page).toHaveURL(new RegExp(`${adminLogin}$`));
+  await page.getByLabel("Login ID").fill("test-admin");
   await page.getByLabel("Password").fill("test-only-password-2026");
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
-  await expect(page).toHaveURL(/\/dashboard$/);
+  await expect(page).toHaveURL(new RegExp(`${adminBase}$`));
   const forgedOrigin = await page.request.post("/api/projects", { headers: { origin: "https://unrelated.example" }, data: {} });
   expect(forgedOrigin.status()).toBe(401);
   const invalidUpload = await page.request.post("/api/uploads", { headers: { origin: "http://localhost:3100" }, multipart: { file: { name: "fake.png", mimeType: "image/png", buffer: Buffer.from("<script>invalid</script>") } } });
@@ -184,6 +192,10 @@ test("protected project CRUD, upload, publishing, and contact inbox", async ({ p
   const publicPage = await request.get("/");
   expect((await publicPage.text()).indexOf('href="/projects/dashboard-integration-test"')).toBeLessThan((await publicPage.text()).indexOf('href="/projects/project-1"'));
   const imageUrl = await page.getByRole("img", { name: "Cover image" }).getAttribute("src");
+  expect(imageUrl).toMatch(/\.webp$/);
+  const media = await request.get(imageUrl!);
+  expect(media.headers()["content-type"]).toBe("image/webp");
+  expect((await sharp(await media.body()).metadata()).format).toBe("webp");
   const databaseUrl = await readFile(path.join(process.env.PLAYWRIGHT_STORAGE_DIR!, "database-url"), "utf8");
   const database = new Client({ connectionString: databaseUrl });
   await database.connect();
@@ -216,9 +228,9 @@ test("protected project CRUD, upload, publishing, and contact inbox", async ({ p
   await expect(page.getByLabel("Project title")).toHaveValue("Dashboard integration test");
   const contact = await request.post("/api/contact", { headers: { origin: "http://localhost:3100" }, form: { name: "Test visitor", email: "visitor@example.com", option: "New Project", message: "Dashboard inquiry test." } });
   expect((await contact.json()).success).toBe(true);
-  await page.goto("/dashboard/messages");
+  await page.goto(adminMessages);
   await expect(page.getByText("Dashboard inquiry test.")).toBeVisible();
-  await page.goto("/dashboard");
+  await page.goto(adminBase);
   await page.getByRole("button", { name: /Dashboard integration test/ }).click();
   page.once("dialog", dialog => dialog.accept());
   await page.getByRole("button", { name: "Delete project", exact: true }).click();
@@ -227,16 +239,18 @@ test("protected project CRUD, upload, publishing, and contact inbox", async ({ p
 });
 
 test("dashboard login, protected routes, responsive editor, and logout", async ({ page }) => {
-  await page.goto("/dashboard/messages");
-  await expect(page).toHaveURL(/\/dashboard\/login$/);
+  await page.goto(adminMessages);
+  await expect(page).toHaveURL(new RegExp(`${adminLogin}$`));
+  await page.getByLabel("Login ID").fill("test-admin");
   await page.getByLabel("Password").fill("incorrect-password");
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
-  await expect(page.locator("form").getByRole("alert")).toHaveText("Incorrect password.");
+  await expect(page.locator("form").getByRole("alert")).toHaveText("Incorrect ID or password.");
+  await page.getByLabel("Login ID").fill("test-admin");
   await page.getByLabel("Password").fill("test-only-password-2026");
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
-  await expect(page).toHaveURL(/\/dashboard$/);
-  await page.goto("/dashboard/login");
-  await expect(page).toHaveURL(/\/dashboard$/);
+  await expect(page).toHaveURL(new RegExp(`${adminBase}$`));
+  await page.goto(adminLogin);
+  await expect(page).toHaveURL(new RegExp(`${adminBase}$`));
   await page.getByLabel("Search projects").fill("Aero Dog");
   await expect(page.locator("aside button[aria-pressed]")).toHaveCount(1);
   await page.getByRole("button", { name: /Aero Dog/ }).click();
@@ -248,10 +262,10 @@ test("dashboard login, protected routes, responsive editor, and logout", async (
     await page.screenshot({ path: `test-results/dashboard-${width}.png`, fullPage: true });
   }
   await page.getByRole("button", { name: "Sign out", exact: true }).click();
-  await expect(page).toHaveURL(/\/dashboard\/login$/);
-  for (const route of ["/dashboard", "/dashboard/messages"]) {
+  await expect(page).toHaveURL(new RegExp(`${adminLogin}$`));
+  for (const route of [adminBase, adminMessages]) {
     await page.goto(route);
-    await expect(page).toHaveURL(/\/dashboard\/login$/);
+    await expect(page).toHaveURL(new RegExp(`${adminLogin}$`));
   }
   const unauthorized = await page.request.post("/api/projects", { headers: { origin: "http://localhost:3100" }, data: {} });
   expect(unauthorized.status()).toBe(401);
@@ -269,11 +283,68 @@ test("the original contact form delivers messages to the protected inbox", async
   await expect(page.locator("#privacy-policy-check")).toBeChecked();
   await clickAfterScrolling(page, page.getByRole("button", { name: "Send Message" }));
   await expect(page.locator(".tt-cfm-success")).toContainText("Your message has been received");
-  await page.goto("/dashboard/messages");
-  await expect(page).toHaveURL(/\/dashboard\/login/);
+  await page.goto(adminMessages);
+  await expect(page).toHaveURL(new RegExp(`${adminLogin}$`));
+  await page.getByLabel("Login ID").fill("test-admin");
   await page.getByLabel("Password").fill("test-only-password-2026");
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
-  await expect(page).toHaveURL(/\/dashboard$/);
-  await page.goto("/dashboard/messages");
+  await expect(page).toHaveURL(new RegExp(`${adminBase}$`));
+  await page.goto(adminMessages);
   await expect(page.getByText("Message submitted through the original portfolio form.")).toBeVisible();
+});
+
+test("common login pages are decoys even with the correct credentials", async ({ page, request }) => {
+  for (const route of ["/admin", "/admin/login", "/dashboard", "/dashboard/login", "/login", "/wp-admin", "/wp-login.php"]) {
+    const response = await page.goto(route);
+    expect(response?.status()).toBe(200);
+    expect(await response!.text()).not.toContain(adminBase);
+    await page.getByLabel("Login ID").fill("test-admin");
+    await page.getByLabel("Password").fill("test-only-password-2026");
+    await page.getByRole("button", { name: "Sign in", exact: true }).click();
+    await expect(page.getByRole("img", { name: "Access denied" })).toBeVisible();
+    expect(new URL(page.url()).pathname).toBe(route);
+    expect((await page.context().cookies()).some(cookie => cookie.name === "portfolio-session")).toBe(false);
+  }
+  expect((await request.post("/api/session", { data: { username: "test-admin", password: "test-only-password-2026" } })).status()).toBe(404);
+  expect((await request.post(`/studio/${"b".repeat(64)}/session`, { data: { username: "test-admin", password: "test-only-password-2026" } })).status()).toBe(404);
+  expect((await request.get(`/studio/${"b".repeat(64)}/login`)).status()).toBe(404);
+});
+
+test("uploads are resized and compressed and already-open public pages refresh live", async ({ page, request, context }) => {
+  await page.goto(adminLogin);
+  await page.getByLabel("Login ID").fill("test-admin");
+  await page.getByLabel("Password").fill("test-only-password-2026");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await expect(page).toHaveURL(new RegExp(`${adminBase}$`));
+  const input = await sharp({ create: { width: 3000, height: 2000, channels: 3, background: { r: 80, g: 130, b: 180 } } }).png().toBuffer();
+  const upload = await page.request.post("/api/uploads", { headers: { origin: "http://localhost:3100" }, multipart: { file: { name: "large.png", mimeType: "image/png", buffer: input } } });
+  expect(upload.status()).toBe(201);
+  const result = await upload.json();
+  expect(result.url).toMatch(/\.webp$/);
+  expect(result.bytes).toBeLessThan(input.length);
+  const metadata = await sharp(await (await request.get(result.url)).body()).metadata();
+  expect(metadata.width).toBeLessThanOrEqual(1920);
+  expect(metadata.height).toBeLessThanOrEqual(1920);
+  const malformed = await page.request.post("/api/uploads", { headers: { origin: "http://localhost:3100" }, multipart: { file: { name: "bad.png", mimeType: "image/png", buffer: Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]) } } });
+  expect(malformed.status()).toBe(400);
+  const publicPage = await context.newPage();
+  const errors: string[] = [];
+  publicPage.on("pageerror", error => errors.push(error.message));
+  try {
+    await publicPage.goto("/projects/project-1");
+    await expect(publicPage.locator(".ph-caption-title")).toHaveText("Aero Dog");
+    const edit = await page.request.put("/api/projects/project-1", { headers: { origin: "http://localhost:3100" }, data: { ...seed[0], gallery: [], title: "Live corrected title", description: "Live corrected description from PostgreSQL.", client: "Live corrected client", year: "2030", role: "Full Stack", website: "https://example.com/live-project", heroImage: result.url } });
+    expect(edit.status()).toBe(200);
+    await expect(publicPage.locator(".ph-caption-title")).toHaveText("Live corrected title", { timeout: 25000 });
+    await expect(publicPage.getByText("Live corrected description from PostgreSQL.", { exact: true })).toHaveText("Live corrected description from PostgreSQL.");
+    expect(await publicPage.locator(".ph-image img").first().getAttribute("src")).toBe(result.url);
+    await expect(publicPage.locator(".pi-list-cont").filter({ hasText: "Live corrected client" })).toHaveText("Live corrected client");
+    await expect(publicPage.locator(".pi-list-cont").filter({ hasText: "2030" })).toHaveText("2030");
+    await expect(publicPage.locator(".pi-list-cont").filter({ hasText: "Full Stack" })).toHaveText("Full Stack");
+    await expect(publicPage.locator('.pi-list-cont a[href="https://example.com/live-project"]')).toHaveCount(1);
+  } finally {
+    await publicPage.close();
+    await page.request.put("/api/projects/project-1", { headers: { origin: "http://localhost:3100" }, data: { ...seed[0], gallery: [] } });
+  }
+  expect(errors).toEqual([]);
 });

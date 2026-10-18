@@ -30,25 +30,30 @@ export async function setupDatabase(connectionString, legacyDirectory = path.res
     await client.query("SELECT pg_advisory_xact_lock(74510911)");
     await client.query("CREATE TABLE IF NOT EXISTS portfolio_migrations (version integer PRIMARY KEY, applied_at timestamptz NOT NULL DEFAULT now())");
     const applied = await client.query("SELECT version FROM portfolio_migrations WHERE version = 1");
-    if (applied.rowCount) {
-      await client.query("COMMIT");
-      return { initialized: false };
+    let result = { initialized: false };
+    if (!applied.rowCount) {
+      await client.query(await readFile(path.join(root, "database/001-initial.sql"), "utf8"));
+      const existing = await client.query("SELECT (SELECT count(*) FROM portfolio_projects) + (SELECT count(*) FROM portfolio_messages) AS total");
+      if (Number(existing.rows[0].total)) throw new Error("Database contains portfolio data without a migration record. Refusing to overwrite it.");
+      const seed = await readJson(path.join(root, "data/projects.seed.json"), []);
+      const projects = legacyDirectory ? await readJson(path.join(legacyDirectory, "projects.json"), seed) : seed;
+      const messages = legacyDirectory ? await readJson(path.join(legacyDirectory, "messages.json"), []) : [];
+      for (const project of projects) {
+        await client.query("INSERT INTO portfolio_projects (id, payload) VALUES ($1, $2::jsonb)", [project.id, JSON.stringify(project)]);
+      }
+      for (const message of messages) {
+        await client.query("INSERT INTO portfolio_messages (id, created_at, name, email, subject, message) VALUES ($1, $2, $3, $4, $5, $6)", [message.id, message.date, message.name, message.email, message.subject, message.message]);
+      }
+      await client.query("INSERT INTO portfolio_migrations (version) VALUES (1)");
+      result = { initialized: true, projects: projects.length, messages: messages.length };
     }
-    await client.query(await readFile(path.join(root, "database/001-initial.sql"), "utf8"));
-    const existing = await client.query("SELECT (SELECT count(*) FROM portfolio_projects) + (SELECT count(*) FROM portfolio_messages) AS total");
-    if (Number(existing.rows[0].total)) throw new Error("Database contains portfolio data without a migration record. Refusing to overwrite it.");
-    const seed = await readJson(path.join(root, "data/projects.seed.json"), []);
-    const projects = legacyDirectory ? await readJson(path.join(legacyDirectory, "projects.json"), seed) : seed;
-    const messages = legacyDirectory ? await readJson(path.join(legacyDirectory, "messages.json"), []) : [];
-    for (const project of projects) {
-      await client.query("INSERT INTO portfolio_projects (id, payload) VALUES ($1, $2::jsonb)", [project.id, JSON.stringify(project)]);
+    const liveMigration = await client.query("SELECT version FROM portfolio_migrations WHERE version = 2");
+    if (!liveMigration.rowCount) {
+      await client.query(await readFile(path.join(root, "database/002-live-content.sql"), "utf8"));
+      await client.query("INSERT INTO portfolio_migrations (version) VALUES (2)");
     }
-    for (const message of messages) {
-      await client.query("INSERT INTO portfolio_messages (id, created_at, name, email, subject, message) VALUES ($1, $2, $3, $4, $5, $6)", [message.id, message.date, message.name, message.email, message.subject, message.message]);
-    }
-    await client.query("INSERT INTO portfolio_migrations (version) VALUES (1)");
     await client.query("COMMIT");
-    return { initialized: true, projects: projects.length, messages: messages.length };
+    return result;
   } catch (error) {
     await client.query("ROLLBACK");
     throw error;
