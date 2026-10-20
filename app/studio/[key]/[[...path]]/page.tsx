@@ -23,7 +23,7 @@ export default async function StudioPage({ params }: { params: Promise<{ key: st
   if (!await authenticated()) redirect(adminPath(key, "login"));
   if (path[0] === "content") {
     const projects = await getProjects();
-    const previewLinks = Object.fromEntries(projects.map(project => [`project-${project.template}`, `/projects/${project.slug}`]));
+    const previewLinks = Object.fromEntries(projects.filter(project => project.published && !project.layoutContent).map(project => [`project-${project.template}`, `/projects/${project.slug}`]));
     return <main className="dashboard"><div className="tw:mx-auto tw:max-w-7xl"><SiteContentDashboard definitions={siteDefinitions} initialRecords={(await getSiteSnapshot()).pages} basePath={basePath} previewLinks={{ ...previewLinks, home: "/", global: "/", privacy: "/privacy" }} /></div></main>;
   }
   if (path[0] === "messages") {
@@ -37,5 +37,7 @@ export default async function StudioPage({ params }: { params: Promise<{ key: st
       </article>)}</div>
     </div></main>;
   }
-  return <main className="dashboard"><div className="tw:mx-auto tw:max-w-6xl"><ProjectDashboard initialProjects={await getProjects()} basePath={basePath} /></div></main>;
+  const snapshot = await getSiteSnapshot();
+  const layoutDefaults = Object.fromEntries(Object.entries(snapshot.pages).filter(([id]) => /^project-[1-9]$/.test(id)).map(([id, record]) => [id, record.content]));
+  return <main className="dashboard"><div className="tw:mx-auto tw:max-w-6xl"><ProjectDashboard initialProjects={await getProjects()} basePath={basePath} layoutDefaults={layoutDefaults} /></div></main>;
 }

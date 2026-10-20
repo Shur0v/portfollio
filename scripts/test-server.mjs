@@ -1,5 +1,6 @@
 import { spawn } from "node:child_process";
 import { mkdtemp, mkdir, writeFile } from "node:fs/promises";
+import { writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { createServer } from "node:net";
 import { randomBytes } from "node:crypto";
@@ -41,7 +42,17 @@ try {
   await writeFile(path.join(process.env.PORTFOLIO_DATA_DIR, "database-url"), connectionString, { mode: 0o600 });
   await writeFile(path.join(process.env.PORTFOLIO_DATA_DIR, "database-directory"), directory);
   server = spawn(process.execPath, [require.resolve("next/dist/bin/next"), "start", "--port", "3100"], {
-    env: { ...process.env, DATABASE_URL: connectionString }, windowsHide: true, stdio: "inherit",
+    env: { ...process.env, DATABASE_URL: connectionString }, windowsHide: true, stdio: ["ignore", "inherit", "pipe"],
+  });
+  let diagnostics = "";
+  let failedStream = false;
+  server.stderr.on("data", chunk => {
+    process.stderr.write(chunk);
+    diagnostics = (diagnostics + chunk.toString()).slice(-8192);
+    if (!failedStream && diagnostics.includes("controller[kState].transformAlgorithm is not a function")) {
+      failedStream = true;
+      writeFileSync(path.join(process.env.PORTFOLIO_DATA_DIR, "server-stream-error"), "Next.js reported an SSR stream failure. Inspect the visible server output.");
+    }
   });
   server.on("error", error => { console.error(error.message); shutdown(1); });
   server.on("exit", code => shutdown(code || 0));

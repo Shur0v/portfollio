@@ -1,3 +1,5 @@
+import type { SitePageContent } from "./site-content-types";
+
 export type Project = {
   id: string;
   slug: string;
@@ -18,9 +20,11 @@ export type Project = {
   gallery?: string[];
   repeatInGrid?: boolean;
   additionalCategories?: string[];
+  layoutContent?: SitePageContent;
 };
 
 export type ProjectPageProps = {
   project: Project;
   projectLinks: Record<string, string>;
+  relatedLinks?: { previous: string; next: string };
 };

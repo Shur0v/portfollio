@@ -2,7 +2,7 @@ import type { Project } from "./project-types";
 import { database, transaction } from "./database";
 
 export async function getProjects(publishedOnly = false) {
-  const result = await database().query<{ payload: Project }>(`SELECT payload FROM portfolio_projects ${publishedOnly ? "WHERE published = true" : ""} ORDER BY display_order, id`);
+  const result = await database().query<{ payload: Project }>(`SELECT ${publishedOnly ? "payload - 'layoutContent'" : "payload"} AS payload FROM portfolio_projects ${publishedOnly ? "WHERE published = true" : ""} ORDER BY display_order, id`);
   return result.rows.map(row => row.payload);
 }
 

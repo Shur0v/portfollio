@@ -195,6 +195,7 @@ test("protected project CRUD, upload, publishing, and contact inbox", async ({ p
   const created = await concurrent.find(response => response.status() === 201)!.json();
   expect((await page.request.delete(`/api/projects/${created.project.id}`, { headers: { origin: "http://localhost:3100" } })).status()).toBe(200);
   await page.getByRole("button", { name: "+ New project" }).click();
+  await page.getByLabel("Project layout", { exact: true }).selectOption("0");
   await page.getByLabel("Project title").fill("Dashboard integration test");
   await page.getByLabel("URL slug").fill("dashboard-integration-test");
   await page.getByLabel("Description", { exact: true }).fill("A test project with a persistent image upload.");

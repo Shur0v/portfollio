@@ -1,0 +1,2226 @@
+[
+  {
+    "template": 1,
+    "name": "Editorial gallery",
+    "sections": [
+      {
+        "id": "section-1",
+        "label": "Overview",
+        "columns": 1,
+        "fields": [
+          {
+            "id": "section-1-1",
+            "label": "Heading 1",
+            "type": "text"
+          },
+          {
+            "id": "section-1-2",
+            "label": "Heading 2",
+            "type": "text"
+          },
+          {
+            "id": "section-1-7",
+            "label": "Short text 1",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "id": "section-2",
+        "label": "Editorial image gallery",
+        "columns": 2,
+        "fields": [
+          {
+            "id": "section-2-4",
+            "label": "Short text 1",
+            "type": "text"
+          },
+          {
+            "id": "section-2-5",
+            "label": "Heading 1",
+            "type": "text"
+          },
+          {
+            "id": "section-2-6",
+            "label": "Heading 2",
+            "type": "text"
+          },
+          {
+            "id": "section-2-7",
+            "label": "Paragraph 1",
+            "type": "textarea"
+          },
+          {
+            "id": "section-2-8",
+            "label": "Link URL 1",
+            "type": "link"
+          },
+          {
+            "id": "section-2-9",
+            "label": "Short text 2",
+            "type": "text"
+          },
+          {
+            "id": "section-2-10",
+            "label": "Short text 3",
+            "type": "text"
+          },
+          {
+            "id": "section-2-14",
+            "label": "Short text 4",
+            "type": "text"
+          },
+          {
+            "id": "section-2-15",
+            "label": "Heading 3",
+            "type": "text"
+          },
+          {
+            "id": "section-2-16",
+            "label": "Heading 4",
+            "type": "text"
+          },
+          {
+            "id": "section-2-17",
+            "label": "Paragraph 2",
+            "type": "textarea"
+          },
+          {
+            "id": "section-2-18",
+            "label": "Link URL 2",
+            "type": "link"
+          },
+          {
+            "id": "section-2-19",
+            "label": "Short text 5",
+            "type": "text"
+          },
+          {
+            "id": "section-2-20",
+            "label": "Short text 6",
+            "type": "text"
+          },
+          {
+            "id": "section-2-24",
+            "label": "Short text 7",
+            "type": "text"
+          },
+          {
+            "id": "section-2-25",
+            "label": "Heading 5",
+            "type": "text"
+          },
+          {
+            "id": "section-2-26",
+            "label": "Heading 6",
+            "type": "text"
+          },
+          {
+            "id": "section-2-27",
+            "label": "Paragraph 3",
+            "type": "textarea"
+          },
+          {
+            "id": "section-2-28",
+            "label": "Link URL 3",
+            "type": "link"
+          },
+          {
+            "id": "section-2-29",
+            "label": "Short text 8",
+            "type": "text"
+          },
+          {
+            "id": "section-2-30",
+            "label": "Short text 9",
+            "type": "text"
+          },
+          {
+            "id": "section-2-34",
+            "label": "Short text 10",
+            "type": "text"
+          },
+          {
+            "id": "section-2-35",
+            "label": "Heading 7",
+            "type": "text"
+          },
+          {
+            "id": "section-2-36",
+            "label": "Heading 8",
+            "type": "text"
+          },
+          {
+            "id": "section-2-37",
+            "label": "Paragraph 4",
+            "type": "textarea"
+          },
+          {
+            "id": "section-2-38",
+            "label": "Link URL 4",
+            "type": "link"
+          },
+          {
+            "id": "section-2-39",
+            "label": "Short text 11",
+            "type": "text"
+          },
+          {
+            "id": "section-2-40",
+            "label": "Short text 12",
+            "type": "text"
+          },
+          {
+            "id": "section-2-44",
+            "label": "Short text 13",
+            "type": "text"
+          },
+          {
+            "id": "section-2-45",
+            "label": "Heading 9",
+            "type": "text"
+          },
+          {
+            "id": "section-2-46",
+            "label": "Heading 10",
+            "type": "text"
+          },
+          {
+            "id": "section-2-47",
+            "label": "Paragraph 5",
+            "type": "textarea"
+          },
+          {
+            "id": "section-2-48",
+            "label": "Link URL 5",
+            "type": "link"
+          },
+          {
+            "id": "section-2-49",
+            "label": "Short text 14",
+            "type": "text"
+          },
+          {
+            "id": "section-2-50",
+            "label": "Short text 15",
+            "type": "text"
+          }
+        ]
+      }
+    ],
+    "slots": [
+      {
+        "id": "section-2-2",
+        "section": "section-2",
+        "bindings": [
+          "section-2-2",
+          "section-2-1"
+        ],
+        "alt": "section-2-3",
+        "kind": "image",
+        "width": 1200,
+        "height": 800,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-2-12",
+        "section": "section-2",
+        "bindings": [
+          "section-2-12",
+          "section-2-11"
+        ],
+        "alt": "section-2-13",
+        "kind": "image",
+        "width": 1200,
+        "height": 1500,
+        "aspect": "portrait"
+      },
+      {
+        "id": "section-2-22",
+        "section": "section-2",
+        "bindings": [
+          "section-2-22",
+          "section-2-21"
+        ],
+        "alt": "section-2-23",
+        "kind": "image",
+        "width": 1200,
+        "height": 1500,
+        "aspect": "portrait"
+      },
+      {
+        "id": "section-2-32",
+        "section": "section-2",
+        "bindings": [
+          "section-2-32",
+          "section-2-31"
+        ],
+        "alt": "section-2-33",
+        "kind": "image",
+        "width": 1200,
+        "height": 1500,
+        "aspect": "portrait"
+      },
+      {
+        "id": "section-2-42",
+        "section": "section-2",
+        "bindings": [
+          "section-2-42",
+          "section-2-41"
+        ],
+        "alt": "section-2-43",
+        "kind": "image",
+        "width": 1200,
+        "height": 1500,
+        "aspect": "portrait"
+      }
+    ],
+    "videos": [],
+    "keepFields": [
+      "hero-3",
+      "hero-6",
+      "hero-9",
+      "hero-12",
+      "section-1-3",
+      "section-1-4",
+      "section-1-5",
+      "section-1-6",
+      "section-1-8"
+    ],
+    "heroFields": [],
+    "navigation": "section-3",
+    "relatedFields": [
+      {
+        "id": "section-3-1",
+        "direction": "previous",
+        "role": "image"
+      },
+      {
+        "id": "section-3-2",
+        "direction": "previous",
+        "role": "alt"
+      },
+      {
+        "id": "section-3-5",
+        "direction": "previous",
+        "role": "title"
+      },
+      {
+        "id": "section-3-7",
+        "direction": "previous",
+        "role": "category"
+      },
+      {
+        "id": "section-3-9",
+        "direction": "previous",
+        "role": "category"
+      },
+      {
+        "id": "section-3-10",
+        "direction": "next",
+        "role": "image"
+      },
+      {
+        "id": "section-3-11",
+        "direction": "next",
+        "role": "alt"
+      },
+      {
+        "id": "section-3-14",
+        "direction": "next",
+        "role": "title"
+      },
+      {
+        "id": "section-3-16",
+        "direction": "next",
+        "role": "category"
+      }
+    ]
+  },
+  {
+    "template": 2,
+    "name": "Full-width story",
+    "sections": [
+      {
+        "id": "section-1",
+        "label": "Full-width image",
+        "columns": 1,
+        "fields": [
+          {
+            "id": "section-1-3",
+            "label": "Short text 1",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "id": "section-2",
+        "label": "Overview",
+        "columns": 1,
+        "fields": [
+          {
+            "id": "section-2-1",
+            "label": "Heading 1",
+            "type": "text"
+          },
+          {
+            "id": "section-2-2",
+            "label": "Heading 2",
+            "type": "text"
+          },
+          {
+            "id": "section-2-7",
+            "label": "Short text 1",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "id": "section-3",
+        "label": "Three-image gallery",
+        "columns": 2,
+        "fields": [
+          {
+            "id": "section-3-4",
+            "label": "Short text 1",
+            "type": "text"
+          },
+          {
+            "id": "section-3-8",
+            "label": "Short text 2",
+            "type": "text"
+          },
+          {
+            "id": "section-3-12",
+            "label": "Short text 3",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "id": "section-4",
+        "label": "Story",
+        "columns": 1,
+        "fields": [
+          {
+            "id": "section-4-1",
+            "label": "Heading 1",
+            "type": "text"
+          },
+          {
+            "id": "section-4-2",
+            "label": "Paragraph 1",
+            "type": "textarea"
+          }
+        ]
+      }
+    ],
+    "slots": [
+      {
+        "id": "section-1-1",
+        "section": "section-1",
+        "bindings": [
+          "section-1-1"
+        ],
+        "alt": "section-1-2",
+        "kind": "image",
+        "width": 1920,
+        "height": 1080,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-3-2",
+        "section": "section-3",
+        "bindings": [
+          "section-3-2",
+          "section-3-1"
+        ],
+        "alt": "section-3-3",
+        "kind": "image",
+        "width": 1200,
+        "height": 1200,
+        "aspect": "square"
+      },
+      {
+        "id": "section-3-6",
+        "section": "section-3",
+        "bindings": [
+          "section-3-6",
+          "section-3-5"
+        ],
+        "alt": "section-3-7",
+        "kind": "image",
+        "width": 1200,
+        "height": 1200,
+        "aspect": "square"
+      },
+      {
+        "id": "section-3-10",
+        "section": "section-3",
+        "bindings": [
+          "section-3-10",
+          "section-3-9"
+        ],
+        "alt": "section-3-11",
+        "kind": "image",
+        "width": 1200,
+        "height": 1200,
+        "aspect": "square"
+      }
+    ],
+    "videos": [],
+    "keepFields": [
+      "hero-3",
+      "hero-6",
+      "hero-9",
+      "hero-12",
+      "section-2-3",
+      "section-2-4",
+      "section-2-5",
+      "section-2-6",
+      "section-2-8"
+    ],
+    "heroFields": [],
+    "navigation": "section-5",
+    "relatedFields": [
+      {
+        "id": "section-5-1",
+        "direction": "previous",
+        "role": "image"
+      },
+      {
+        "id": "section-5-2",
+        "direction": "previous",
+        "role": "alt"
+      },
+      {
+        "id": "section-5-5",
+        "direction": "previous",
+        "role": "title"
+      },
+      {
+        "id": "section-5-7",
+        "direction": "previous",
+        "role": "category"
+      },
+      {
+        "id": "section-5-8",
+        "direction": "next",
+        "role": "image"
+      },
+      {
+        "id": "section-5-9",
+        "direction": "next",
+        "role": "alt"
+      },
+      {
+        "id": "section-5-12",
+        "direction": "next",
+        "role": "title"
+      },
+      {
+        "id": "section-5-14",
+        "direction": "next",
+        "role": "category"
+      }
+    ]
+  },
+  {
+    "template": 3,
+    "name": "Video and mixed media",
+    "sections": [
+      {
+        "id": "section-1",
+        "label": "Overview",
+        "columns": 1,
+        "fields": [
+          {
+            "id": "section-1-1",
+            "label": "Heading 1",
+            "type": "text"
+          },
+          {
+            "id": "section-1-2",
+            "label": "Heading 2",
+            "type": "text"
+          },
+          {
+            "id": "section-1-7",
+            "label": "Short text 1",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "id": "section-2",
+        "label": "Mixed-media gallery",
+        "columns": 2,
+        "fields": []
+      },
+      {
+        "id": "section-3",
+        "label": "Story",
+        "columns": 1,
+        "fields": [
+          {
+            "id": "section-3-1",
+            "label": "Heading 1",
+            "type": "text"
+          },
+          {
+            "id": "section-3-2",
+            "label": "Paragraph 1",
+            "type": "textarea"
+          },
+          {
+            "id": "section-3-3",
+            "label": "Link URL 1",
+            "type": "link"
+          },
+          {
+            "id": "section-3-4",
+            "label": "Short text 1",
+            "type": "text"
+          },
+          {
+            "id": "section-3-5",
+            "label": "Short text 2",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "id": "section-4",
+        "label": "Full-width image",
+        "columns": 1,
+        "fields": [
+          {
+            "id": "section-4-3",
+            "label": "Short text 1",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "id": "section-5",
+        "label": "Closing statement",
+        "columns": 1,
+        "fields": [
+          {
+            "id": "section-5-1",
+            "label": "Heading 1",
+            "type": "text"
+          },
+          {
+            "id": "section-5-2",
+            "label": "Paragraph 1",
+            "type": "textarea"
+          }
+        ]
+      }
+    ],
+    "slots": [
+      {
+        "id": "section-2-2",
+        "section": "section-2",
+        "bindings": [
+          "section-2-2",
+          "section-2-1"
+        ],
+        "alt": "section-2-3",
+        "kind": "image",
+        "width": 800,
+        "height": 400,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-2-5",
+        "section": "section-2",
+        "bindings": [
+          "section-2-5",
+          "section-2-4"
+        ],
+        "alt": "section-2-6",
+        "kind": "image",
+        "width": 800,
+        "height": 476,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-2-8",
+        "section": "section-2",
+        "bindings": [
+          "section-2-8",
+          "section-2-7"
+        ],
+        "alt": "section-2-9",
+        "kind": "image",
+        "width": 800,
+        "height": 476,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-2-11",
+        "section": "section-2",
+        "bindings": [
+          "section-2-11",
+          "section-2-10"
+        ],
+        "alt": "section-2-12",
+        "kind": "image",
+        "width": 800,
+        "height": 400,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-2-14",
+        "section": "section-2",
+        "bindings": [
+          "section-2-14"
+        ],
+        "alt": "",
+        "kind": "poster",
+        "width": 1920,
+        "height": 960,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-2-20",
+        "section": "section-2",
+        "bindings": [
+          "section-2-20",
+          "section-2-19"
+        ],
+        "alt": "section-2-21",
+        "kind": "image",
+        "width": 800,
+        "height": 476,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-4-1",
+        "section": "section-4",
+        "bindings": [
+          "section-4-1"
+        ],
+        "alt": "section-4-2",
+        "kind": "image",
+        "width": 1920,
+        "height": 960,
+        "aspect": "landscape"
+      }
+    ],
+    "videos": [
+      {
+        "section": "section-2",
+        "sources": [
+          {
+            "id": "section-2-16",
+            "placeholder": "section-2-15",
+            "type": "video/mp4"
+          },
+          {
+            "id": "section-2-18",
+            "placeholder": "section-2-17",
+            "type": "video/webm"
+          }
+        ],
+        "link": "section-2-13"
+      }
+    ],
+    "keepFields": [
+      "hero-2",
+      "hero-4",
+      "hero-9",
+      "hero-12",
+      "hero-15",
+      "hero-18",
+      "section-1-3",
+      "section-1-4",
+      "section-1-5",
+      "section-1-6",
+      "section-1-8",
+      "section-2-15",
+      "section-2-17"
+    ],
+    "heroFields": [
+      {
+        "id": "hero-7",
+        "label": "Hero subtitle 1",
+        "type": "text"
+      }
+    ],
+    "navigation": "section-6",
+    "relatedFields": [
+      {
+        "id": "section-6-1",
+        "direction": "previous",
+        "role": "image"
+      },
+      {
+        "id": "section-6-2",
+        "direction": "previous",
+        "role": "alt"
+      },
+      {
+        "id": "section-6-5",
+        "direction": "previous",
+        "role": "title"
+      },
+      {
+        "id": "section-6-7",
+        "direction": "previous",
+        "role": "category"
+      },
+      {
+        "id": "section-6-8",
+        "direction": "next",
+        "role": "image"
+      },
+      {
+        "id": "section-6-9",
+        "direction": "next",
+        "role": "alt"
+      },
+      {
+        "id": "section-6-12",
+        "direction": "next",
+        "role": "title"
+      },
+      {
+        "id": "section-6-14",
+        "direction": "next",
+        "role": "category"
+      }
+    ]
+  },
+  {
+    "template": 4,
+    "name": "Nine-image grid",
+    "sections": [
+      {
+        "id": "section-1",
+        "label": "Overview",
+        "columns": 1,
+        "fields": [
+          {
+            "id": "section-1-1",
+            "label": "Heading 1",
+            "type": "text"
+          },
+          {
+            "id": "section-1-6",
+            "label": "Short text 1",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "id": "section-2",
+        "label": "Nine-image grid",
+        "columns": 3,
+        "fields": []
+      },
+      {
+        "id": "section-3",
+        "label": "Story",
+        "columns": 1,
+        "fields": [
+          {
+            "id": "section-3-1",
+            "label": "Heading 1",
+            "type": "text"
+          },
+          {
+            "id": "section-3-2",
+            "label": "Paragraph 1",
+            "type": "textarea"
+          },
+          {
+            "id": "section-3-3",
+            "label": "Paragraph 2",
+            "type": "textarea"
+          }
+        ]
+      },
+      {
+        "id": "section-4",
+        "label": "Full-width feature",
+        "columns": 1,
+        "fields": [
+          {
+            "id": "section-4-3",
+            "label": "Heading 1",
+            "type": "text"
+          },
+          {
+            "id": "section-4-4",
+            "label": "Heading 2",
+            "type": "text"
+          },
+          {
+            "id": "section-4-5",
+            "label": "Heading 3",
+            "type": "text"
+          },
+          {
+            "id": "section-4-6",
+            "label": "Link URL 1",
+            "type": "link"
+          },
+          {
+            "id": "section-4-7",
+            "label": "Short text 1",
+            "type": "text"
+          },
+          {
+            "id": "section-4-8",
+            "label": "Short text 2",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "id": "section-5",
+        "label": "Design notes",
+        "columns": 1,
+        "fields": [
+          {
+            "id": "section-5-1",
+            "label": "Heading 1",
+            "type": "text"
+          },
+          {
+            "id": "section-5-2",
+            "label": "Paragraph 1",
+            "type": "textarea"
+          },
+          {
+            "id": "section-5-3",
+            "label": "Paragraph 2",
+            "type": "text"
+          },
+          {
+            "id": "section-5-4",
+            "label": "Link URL 1",
+            "type": "link"
+          },
+          {
+            "id": "section-5-5",
+            "label": "Short text 1",
+            "type": "text"
+          },
+          {
+            "id": "section-5-6",
+            "label": "Paragraph 3",
+            "type": "text"
+          }
+        ]
+      }
+    ],
+    "slots": [
+      {
+        "id": "section-2-2",
+        "section": "section-2",
+        "bindings": [
+          "section-2-2",
+          "section-2-1"
+        ],
+        "alt": "section-2-3",
+        "kind": "image",
+        "width": 600,
+        "height": 408,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-2-5",
+        "section": "section-2",
+        "bindings": [
+          "section-2-5",
+          "section-2-4"
+        ],
+        "alt": "section-2-6",
+        "kind": "image",
+        "width": 600,
+        "height": 408,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-2-8",
+        "section": "section-2",
+        "bindings": [
+          "section-2-8",
+          "section-2-7"
+        ],
+        "alt": "section-2-9",
+        "kind": "image",
+        "width": 600,
+        "height": 408,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-2-11",
+        "section": "section-2",
+        "bindings": [
+          "section-2-11",
+          "section-2-10"
+        ],
+        "alt": "section-2-12",
+        "kind": "image",
+        "width": 600,
+        "height": 408,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-2-14",
+        "section": "section-2",
+        "bindings": [
+          "section-2-14",
+          "section-2-13"
+        ],
+        "alt": "section-2-15",
+        "kind": "image",
+        "width": 600,
+        "height": 391,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-2-17",
+        "section": "section-2",
+        "bindings": [
+          "section-2-17",
+          "section-2-16"
+        ],
+        "alt": "section-2-18",
+        "kind": "image",
+        "width": 600,
+        "height": 391,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-2-20",
+        "section": "section-2",
+        "bindings": [
+          "section-2-20",
+          "section-2-19"
+        ],
+        "alt": "section-2-21",
+        "kind": "image",
+        "width": 600,
+        "height": 408,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-2-23",
+        "section": "section-2",
+        "bindings": [
+          "section-2-23",
+          "section-2-22"
+        ],
+        "alt": "section-2-24",
+        "kind": "image",
+        "width": 600,
+        "height": 408,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-2-26",
+        "section": "section-2",
+        "bindings": [
+          "section-2-26",
+          "section-2-25"
+        ],
+        "alt": "section-2-27",
+        "kind": "image",
+        "width": 600,
+        "height": 395,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-4-1",
+        "section": "section-4",
+        "bindings": [
+          "section-4-1"
+        ],
+        "alt": "section-4-2",
+        "kind": "image",
+        "width": 1920,
+        "height": 1306,
+        "aspect": "landscape"
+      }
+    ],
+    "videos": [],
+    "keepFields": [
+      "hero-3",
+      "hero-6",
+      "hero-9",
+      "hero-12",
+      "section-1-2",
+      "section-1-3",
+      "section-1-4",
+      "section-1-5",
+      "section-1-7"
+    ],
+    "heroFields": [],
+    "navigation": "section-6",
+    "relatedFields": [
+      {
+        "id": "section-6-1",
+        "direction": "previous",
+        "role": "image"
+      },
+      {
+        "id": "section-6-2",
+        "direction": "previous",
+        "role": "alt"
+      },
+      {
+        "id": "section-6-5",
+        "direction": "previous",
+        "role": "title"
+      },
+      {
+        "id": "section-6-7",
+        "direction": "previous",
+        "role": "category"
+      },
+      {
+        "id": "section-6-8",
+        "direction": "next",
+        "role": "image"
+      },
+      {
+        "id": "section-6-9",
+        "direction": "next",
+        "role": "alt"
+      },
+      {
+        "id": "section-6-12",
+        "direction": "next",
+        "role": "title"
+      },
+      {
+        "id": "section-6-14",
+        "direction": "next",
+        "role": "category"
+      }
+    ]
+  },
+  {
+    "template": 5,
+    "name": "Tilted four-column galleries",
+    "sections": [
+      {
+        "id": "section-1",
+        "label": "Overview",
+        "columns": 1,
+        "fields": [
+          {
+            "id": "section-1-1",
+            "label": "Heading 1",
+            "type": "text"
+          },
+          {
+            "id": "section-1-2",
+            "label": "Heading 2",
+            "type": "text"
+          },
+          {
+            "id": "section-1-7",
+            "label": "Short text 1",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "id": "section-2",
+        "label": "Gallery row 1",
+        "columns": 4,
+        "fields": []
+      },
+      {
+        "id": "section-3",
+        "label": "Vision",
+        "columns": 1,
+        "fields": [
+          {
+            "id": "section-3-1",
+            "label": "Heading 1",
+            "type": "text"
+          },
+          {
+            "id": "section-3-2",
+            "label": "Paragraph 1",
+            "type": "textarea"
+          }
+        ]
+      },
+      {
+        "id": "section-4",
+        "label": "Gallery row 2",
+        "columns": 4,
+        "fields": []
+      },
+{
+        "id": "section-5",
+        "label": "Credits",
+        "columns": 1,
+        "fields": [
+          {
+            "id": "section-5-1",
+            "label": "Section eyebrow",
+            "type": "text"
+          },
+          {
+            "id": "section-5-2",
+            "label": "Section heading — first line",
+            "type": "text"
+          },
+          {
+            "id": "section-5-3",
+            "label": "Section heading — second line",
+            "type": "text"
+          },
+          {
+            "id": "section-5-4",
+            "label": "Credit 1 name",
+            "type": "text"
+          },
+          {
+            "id": "section-5-5",
+            "label": "Credit 1 role",
+            "type": "text"
+          },
+          {
+            "id": "section-5-6",
+            "label": "Credit 2 name",
+            "type": "text"
+          },
+          {
+            "id": "section-5-7",
+            "label": "Credit 2 role",
+            "type": "text"
+          },
+          {
+            "id": "section-5-8",
+            "label": "Credit 3 name",
+            "type": "text"
+          },
+          {
+            "id": "section-5-9",
+            "label": "Credit 3 role",
+            "type": "text"
+          },
+          {
+            "id": "section-5-10",
+            "label": "Credit 4 name",
+            "type": "text"
+          },
+          {
+            "id": "section-5-11",
+            "label": "Credit 4 role",
+            "type": "text"
+          },
+          {
+            "id": "section-5-12",
+            "label": "Credit 5 name",
+            "type": "text"
+          },
+          {
+            "id": "section-5-13",
+            "label": "Credit 5 role",
+            "type": "text"
+          },
+          {
+            "id": "section-5-14",
+            "label": "Credit 6 name",
+            "type": "text"
+          },
+          {
+            "id": "section-5-15",
+            "label": "Credit 6 role",
+            "type": "text"
+          }
+        ]
+      }
+    ],
+    "slots": [
+      {
+        "id": "section-2-2",
+        "section": "section-2",
+        "bindings": [
+          "section-2-2",
+          "section-2-1"
+        ],
+        "alt": "section-2-3",
+        "kind": "image",
+        "width": 800,
+        "height": 1200,
+        "aspect": "portrait"
+      },
+      {
+        "id": "section-2-5",
+        "section": "section-2",
+        "bindings": [
+          "section-2-5",
+          "section-2-4"
+        ],
+        "alt": "section-2-6",
+        "kind": "image",
+        "width": 896,
+        "height": 1200,
+        "aspect": "portrait"
+      },
+      {
+        "id": "section-2-8",
+        "section": "section-2",
+        "bindings": [
+          "section-2-8",
+          "section-2-7"
+        ],
+        "alt": "section-2-9",
+        "kind": "image",
+        "width": 904,
+        "height": 1200,
+        "aspect": "portrait"
+      },
+      {
+        "id": "section-2-11",
+        "section": "section-2",
+        "bindings": [
+          "section-2-11",
+          "section-2-10"
+        ],
+        "alt": "section-2-12",
+        "kind": "image",
+        "width": 900,
+        "height": 1200,
+        "aspect": "portrait"
+      },
+      {
+        "id": "section-4-2",
+        "section": "section-4",
+        "bindings": [
+          "section-4-2",
+          "section-4-1"
+        ],
+        "alt": "section-4-3",
+        "kind": "image",
+        "width": 904,
+        "height": 1200,
+        "aspect": "portrait"
+      },
+      {
+        "id": "section-4-5",
+        "section": "section-4",
+        "bindings": [
+          "section-4-5",
+          "section-4-4"
+        ],
+        "alt": "section-4-6",
+        "kind": "image",
+        "width": 800,
+        "height": 1200,
+        "aspect": "portrait"
+      },
+      {
+        "id": "section-4-8",
+        "section": "section-4",
+        "bindings": [
+          "section-4-8",
+          "section-4-7"
+        ],
+        "alt": "section-4-9",
+        "kind": "image",
+        "width": 800,
+        "height": 1200,
+        "aspect": "portrait"
+      },
+      {
+        "id": "section-4-11",
+        "section": "section-4",
+        "bindings": [
+          "section-4-11",
+          "section-4-10"
+        ],
+        "alt": "section-4-12",
+        "kind": "image",
+        "width": 800,
+        "height": 1200,
+        "aspect": "portrait"
+      }
+    ],
+    "videos": [],
+    "keepFields": [
+      "hero-3",
+      "hero-6",
+      "hero-9",
+      "hero-12",
+      "section-1-3",
+      "section-1-4",
+      "section-1-5",
+      "section-1-6",
+      "section-1-8"
+    ],
+    "heroFields": [],
+    "navigation": "section-6",
+    "relatedFields": [
+      {
+        "id": "section-6-1",
+        "direction": "previous",
+        "role": "image"
+      },
+      {
+        "id": "section-6-2",
+        "direction": "previous",
+        "role": "alt"
+      },
+      {
+        "id": "section-6-5",
+        "direction": "previous",
+        "role": "title"
+      },
+      {
+        "id": "section-6-7",
+        "direction": "previous",
+        "role": "category"
+      },
+      {
+        "id": "section-6-8",
+        "direction": "next",
+        "role": "image"
+      },
+      {
+        "id": "section-6-9",
+        "direction": "next",
+        "role": "alt"
+      },
+      {
+        "id": "section-6-12",
+        "direction": "next",
+        "role": "title"
+      },
+      {
+        "id": "section-6-14",
+        "direction": "next",
+        "role": "category"
+      }
+    ]
+  },
+  {
+    "template": 6,
+    "name": "Image carousel",
+    "sections": [
+      {
+        "id": "section-1",
+        "label": "Introduction",
+        "columns": 1,
+        "fields": [
+          {
+            "id": "section-1-1",
+            "label": "Heading 1",
+            "type": "text"
+          },
+          {
+            "id": "section-1-2",
+            "label": "Heading 2",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "id": "section-2",
+        "label": "Six-image carousel",
+        "columns": 2,
+        "fields": []
+      },
+      {
+        "id": "section-3",
+        "label": "Story",
+        "columns": 1,
+        "fields": [
+          {
+            "id": "section-3-1",
+            "label": "Paragraph 1",
+            "type": "textarea"
+          }
+        ]
+      },
+      {
+        "id": "section-4",
+        "label": "Full-width feature",
+        "columns": 1,
+        "fields": [
+          {
+            "id": "section-4-3",
+            "label": "Short text 1",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "id": "section-5",
+        "label": "Design notes",
+        "columns": 1,
+        "fields": [
+          {
+            "id": "section-5-1",
+            "label": "Heading 1",
+            "type": "text"
+          },
+          {
+            "id": "section-5-2",
+            "label": "Paragraph 1",
+            "type": "textarea"
+          },
+          {
+            "id": "section-5-3",
+            "label": "Link URL 1",
+            "type": "link"
+          },
+          {
+            "id": "section-5-4",
+            "label": "Short text 1",
+            "type": "text"
+          },
+          {
+            "id": "section-5-5",
+            "label": "Short text 2",
+            "type": "text"
+          }
+        ]
+      }
+    ],
+    "slots": [
+      {
+        "id": "section-2-1",
+        "section": "section-2",
+        "bindings": [
+          "section-2-1"
+        ],
+        "alt": "section-2-2",
+        "kind": "image",
+        "width": 1200,
+        "height": 816,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-2-3",
+        "section": "section-2",
+        "bindings": [
+          "section-2-3"
+        ],
+        "alt": "section-2-4",
+        "kind": "image",
+        "width": 1200,
+        "height": 816,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-2-5",
+        "section": "section-2",
+        "bindings": [
+          "section-2-5"
+        ],
+        "alt": "section-2-6",
+        "kind": "image",
+        "width": 1200,
+        "height": 816,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-2-7",
+        "section": "section-2",
+        "bindings": [
+          "section-2-7"
+        ],
+        "alt": "section-2-8",
+        "kind": "image",
+        "width": 1200,
+        "height": 816,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-2-9",
+        "section": "section-2",
+        "bindings": [
+          "section-2-9"
+        ],
+        "alt": "section-2-10",
+        "kind": "image",
+        "width": 1200,
+        "height": 816,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-2-11",
+        "section": "section-2",
+        "bindings": [
+          "section-2-11"
+        ],
+        "alt": "section-2-12",
+        "kind": "image",
+        "width": 1200,
+        "height": 816,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-4-1",
+        "section": "section-4",
+        "bindings": [
+          "section-4-1"
+        ],
+        "alt": "section-4-2",
+        "kind": "image",
+        "width": 1920,
+        "height": 1306,
+        "aspect": "landscape"
+      }
+    ],
+    "videos": [],
+    "keepFields": [
+      "hero-3",
+      "hero-6",
+      "hero-9",
+      "hero-12"
+    ],
+    "heroFields": [],
+    "navigation": "section-6",
+    "relatedFields": [
+      {
+        "id": "section-6-1",
+        "direction": "previous",
+        "role": "image"
+      },
+      {
+        "id": "section-6-2",
+        "direction": "previous",
+        "role": "alt"
+      },
+      {
+        "id": "section-6-5",
+        "direction": "previous",
+        "role": "title"
+      },
+      {
+        "id": "section-6-7",
+        "direction": "previous",
+        "role": "category"
+      },
+      {
+        "id": "section-6-8",
+        "direction": "next",
+        "role": "image"
+      },
+      {
+        "id": "section-6-9",
+        "direction": "next",
+        "role": "alt"
+      },
+      {
+        "id": "section-6-12",
+        "direction": "next",
+        "role": "title"
+      },
+      {
+        "id": "section-6-14",
+        "direction": "next",
+        "role": "category"
+      }
+    ]
+  },
+  {
+    "template": 7,
+    "name": "Split story and gallery",
+    "sections": [
+      {
+        "id": "section-1",
+        "label": "Introduction",
+        "columns": 1,
+        "fields": [
+          {
+            "id": "section-1-1",
+            "label": "Heading 1",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "id": "section-2",
+        "label": "Split story and gallery",
+        "columns": 2,
+        "fields": [
+          {
+            "id": "section-2-1",
+            "label": "Heading 1",
+            "type": "text"
+          },
+          {
+            "id": "section-2-6",
+            "label": "Short text 1",
+            "type": "text"
+          },
+          {
+            "id": "section-2-11",
+            "label": "Short text 2",
+            "type": "text"
+          },
+          {
+            "id": "section-2-15",
+            "label": "Short text 3",
+            "type": "text"
+          },
+          {
+            "id": "section-2-19",
+            "label": "Short text 4",
+            "type": "text"
+          },
+          {
+            "id": "section-2-23",
+            "label": "Short text 5",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "id": "section-3",
+        "label": "Closing statement",
+        "columns": 1,
+        "fields": [
+          {
+            "id": "section-3-1",
+            "label": "Heading 1",
+            "type": "text"
+          },
+          {
+            "id": "section-3-2",
+            "label": "Paragraph 1",
+            "type": "textarea"
+          }
+        ]
+      }
+    ],
+    "slots": [
+      {
+        "id": "section-2-9",
+        "section": "section-2",
+        "bindings": [
+          "section-2-9",
+          "section-2-8"
+        ],
+        "alt": "section-2-10",
+        "kind": "image",
+        "width": 1200,
+        "height": 800,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-2-13",
+        "section": "section-2",
+        "bindings": [
+          "section-2-13",
+          "section-2-12"
+        ],
+        "alt": "section-2-14",
+        "kind": "image",
+        "width": 1200,
+        "height": 800,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-2-17",
+        "section": "section-2",
+        "bindings": [
+          "section-2-17",
+          "section-2-16"
+        ],
+        "alt": "section-2-18",
+        "kind": "image",
+        "width": 1200,
+        "height": 800,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-2-21",
+        "section": "section-2",
+        "bindings": [
+          "section-2-21",
+          "section-2-20"
+        ],
+        "alt": "section-2-22",
+        "kind": "image",
+        "width": 1200,
+        "height": 800,
+        "aspect": "landscape"
+      }
+    ],
+    "videos": [],
+    "keepFields": [
+      "hero-3",
+      "hero-6",
+      "hero-9",
+      "hero-12",
+      "section-2-2",
+      "section-2-3",
+      "section-2-4",
+      "section-2-5",
+      "section-2-7"
+    ],
+    "heroFields": [],
+    "navigation": "section-4",
+    "relatedFields": [
+      {
+        "id": "section-4-1",
+        "direction": "previous",
+        "role": "image"
+      },
+      {
+        "id": "section-4-2",
+        "direction": "previous",
+        "role": "alt"
+      },
+      {
+        "id": "section-4-5",
+        "direction": "previous",
+        "role": "title"
+      },
+      {
+        "id": "section-4-7",
+        "direction": "previous",
+        "role": "category"
+      },
+      {
+        "id": "section-4-8",
+        "direction": "next",
+        "role": "image"
+      },
+      {
+        "id": "section-4-9",
+        "direction": "next",
+        "role": "alt"
+      },
+      {
+        "id": "section-4-12",
+        "direction": "next",
+        "role": "title"
+      },
+      {
+        "id": "section-4-14",
+        "direction": "next",
+        "role": "category"
+      }
+    ]
+  },
+  {
+    "template": 8,
+    "name": "Alternate split gallery",
+    "sections": [
+      {
+        "id": "section-1",
+        "label": "Introduction",
+        "columns": 1,
+        "fields": [
+          {
+            "id": "section-1-1",
+            "label": "Heading 1",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "id": "section-2",
+        "label": "Split story and gallery",
+        "columns": 2,
+        "fields": [
+          {
+            "id": "section-2-1",
+            "label": "Heading 1",
+            "type": "text"
+          },
+          {
+            "id": "section-2-6",
+            "label": "Short text 1",
+            "type": "text"
+          },
+          {
+            "id": "section-2-11",
+            "label": "Short text 2",
+            "type": "text"
+          },
+          {
+            "id": "section-2-15",
+            "label": "Short text 3",
+            "type": "text"
+          },
+          {
+            "id": "section-2-19",
+            "label": "Short text 4",
+            "type": "text"
+          },
+          {
+            "id": "section-2-23",
+            "label": "Short text 5",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "id": "section-3",
+        "label": "Closing statement",
+        "columns": 1,
+        "fields": [
+          {
+            "id": "section-3-1",
+            "label": "Heading 1",
+            "type": "text"
+          },
+          {
+            "id": "section-3-2",
+            "label": "Paragraph 1",
+            "type": "textarea"
+          }
+        ]
+      }
+    ],
+    "slots": [
+      {
+        "id": "section-2-9",
+        "section": "section-2",
+        "bindings": [
+          "section-2-9",
+          "section-2-8"
+        ],
+        "alt": "section-2-10",
+        "kind": "image",
+        "width": 1200,
+        "height": 675,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-2-13",
+        "section": "section-2",
+        "bindings": [
+          "section-2-13",
+          "section-2-12"
+        ],
+        "alt": "section-2-14",
+        "kind": "image",
+        "width": 1200,
+        "height": 675,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-2-17",
+        "section": "section-2",
+        "bindings": [
+          "section-2-17",
+          "section-2-16"
+        ],
+        "alt": "section-2-18",
+        "kind": "image",
+        "width": 1200,
+        "height": 675,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-2-21",
+        "section": "section-2",
+        "bindings": [
+          "section-2-21",
+          "section-2-20"
+        ],
+        "alt": "section-2-22",
+        "kind": "image",
+        "width": 1200,
+        "height": 675,
+        "aspect": "landscape"
+      }
+    ],
+    "videos": [],
+    "keepFields": [
+      "hero-3",
+      "hero-6",
+      "hero-9",
+      "hero-12",
+      "section-2-2",
+      "section-2-3",
+      "section-2-4",
+      "section-2-5",
+      "section-2-7"
+    ],
+    "heroFields": [],
+    "navigation": "section-4",
+    "relatedFields": [
+      {
+        "id": "section-4-1",
+        "direction": "previous",
+        "role": "image"
+      },
+      {
+        "id": "section-4-2",
+        "direction": "previous",
+        "role": "alt"
+      },
+      {
+        "id": "section-4-5",
+        "direction": "previous",
+        "role": "title"
+      },
+      {
+        "id": "section-4-7",
+        "direction": "previous",
+        "role": "category"
+      },
+      {
+        "id": "section-4-8",
+        "direction": "next",
+        "role": "image"
+      },
+      {
+        "id": "section-4-9",
+        "direction": "next",
+        "role": "alt"
+      },
+      {
+        "id": "section-4-12",
+        "direction": "next",
+        "role": "title"
+      },
+      {
+        "id": "section-4-14",
+        "direction": "next",
+        "role": "category"
+      },
+      {
+        "id": "section-4-16",
+        "direction": "next",
+        "role": "category"
+      }
+    ]
+  },
+  {
+    "template": 9,
+    "name": "Feature and carousel",
+    "sections": [
+      {
+        "id": "section-1",
+        "label": "Overview",
+        "columns": 1,
+        "fields": [
+          {
+            "id": "section-1-1",
+            "label": "Heading 1",
+            "type": "text"
+          },
+          {
+            "id": "section-1-2",
+            "label": "Heading 2",
+            "type": "text"
+          },
+          {
+            "id": "section-1-7",
+            "label": "Short text 1",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "id": "section-2",
+        "label": "Full-width feature",
+        "columns": 1,
+        "fields": [
+          {
+            "id": "section-2-3",
+            "label": "Short text 1",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "id": "section-3",
+        "label": "Story",
+        "columns": 1,
+        "fields": [
+          {
+            "id": "section-3-1",
+            "label": "Heading 1",
+            "type": "text"
+          },
+          {
+            "id": "section-3-2",
+            "label": "Paragraph 1",
+            "type": "textarea"
+          }
+        ]
+      },
+      {
+        "id": "section-4",
+        "label": "Four-image carousel",
+        "columns": 2,
+        "fields": [
+          {
+            "id": "section-4-3",
+            "label": "Short text 1",
+            "type": "text"
+          },
+          {
+            "id": "section-4-6",
+            "label": "Short text 2",
+            "type": "text"
+          },
+          {
+            "id": "section-4-9",
+            "label": "Short text 3",
+            "type": "text"
+          },
+          {
+            "id": "section-4-12",
+            "label": "Short text 4",
+            "type": "text"
+          },
+          {
+            "id": "section-4-13",
+            "label": "Short text 5",
+            "type": "text"
+          }
+        ]
+      },
+      {
+        "id": "section-5",
+        "label": "Closing statement",
+        "columns": 1,
+        "fields": [
+          {
+            "id": "section-5-1",
+            "label": "Heading 1",
+            "type": "text"
+          },
+          {
+            "id": "section-5-2",
+            "label": "Paragraph 1",
+            "type": "textarea"
+          }
+        ]
+      }
+    ],
+    "slots": [
+      {
+        "id": "section-2-1",
+        "section": "section-2",
+        "bindings": [
+          "section-2-1"
+        ],
+        "alt": "section-2-2",
+        "kind": "image",
+        "width": 1920,
+        "height": 1280,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-4-1",
+        "section": "section-4",
+        "bindings": [
+          "section-4-1"
+        ],
+        "alt": "section-4-2",
+        "kind": "image",
+        "width": 1200,
+        "height": 800,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-4-4",
+        "section": "section-4",
+        "bindings": [
+          "section-4-4"
+        ],
+        "alt": "section-4-5",
+        "kind": "image",
+        "width": 1200,
+        "height": 800,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-4-7",
+        "section": "section-4",
+        "bindings": [
+          "section-4-7"
+        ],
+        "alt": "section-4-8",
+        "kind": "image",
+        "width": 1200,
+        "height": 800,
+        "aspect": "landscape"
+      },
+      {
+        "id": "section-4-10",
+        "section": "section-4",
+        "bindings": [
+          "section-4-10"
+        ],
+        "alt": "section-4-11",
+        "kind": "image",
+        "width": 1200,
+        "height": 800,
+        "aspect": "landscape"
+      }
+    ],
+    "videos": [],
+    "keepFields": [
+      "hero-5",
+      "hero-8",
+      "hero-11",
+      "hero-14",
+      "section-1-3",
+      "section-1-4",
+      "section-1-5",
+      "section-1-6",
+      "section-1-8",
+      "section-4-14"
+    ],
+    "heroFields": [],
+    "navigation": "section-6",
+    "relatedFields": [
+      {
+        "id": "section-6-1",
+        "direction": "previous",
+        "role": "image"
+      },
+      {
+        "id": "section-6-2",
+        "direction": "previous",
+        "role": "alt"
+      },
+      {
+        "id": "section-6-5",
+        "direction": "previous",
+        "role": "title"
+      },
+      {
+        "id": "section-6-7",
+        "direction": "previous",
+        "role": "category"
+      },
+      {
+        "id": "section-6-8",
+        "direction": "next",
+        "role": "image"
+      },
+      {
+        "id": "section-6-9",
+        "direction": "next",
+        "role": "alt"
+      },
+      {
+        "id": "section-6-12",
+        "direction": "next",
+        "role": "title"
+      },
+      {
+        "id": "section-6-14",
+        "direction": "next",
+        "role": "category"
+      }
+    ]
+  }
+]

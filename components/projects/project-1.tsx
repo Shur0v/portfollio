@@ -9,7 +9,7 @@ import type { ProjectPageProps } from "../../lib/project-types";
 import { ProjectGallery } from "../project-gallery";
 import { usePortfolioRuntime } from "../portfolio-runtime";
 
-export default function Project1({ project, projectLinks }: ProjectPageProps) {
+export default function Project1({ project, projectLinks, relatedLinks }: ProjectPageProps) {
   const content = useSiteContent("project-1");
   const shared = useSiteContent("global");
   usePortfolioRuntime();
@@ -897,7 +897,7 @@ export default function Project1({ project, projectLinks }: ProjectPageProps) {
         <div className="tt-row">
           <div className="tt-col-6 border-right">
             <div className="tt-ps-nav-item tt-ps-nav-prev">
-              <a href={projectLinks["project-9"] || "/#portfolio"} className="tt-ps-nav-image" data-cursor={mediaLabel(content.values["extra-label-11"])}>
+              <a href={(project.layoutContent ? relatedLinks?.previous : projectLinks["project-9"]) || "/#portfolio"} className="tt-ps-nav-image" data-cursor={mediaLabel(content.values["extra-label-11"])}>
                 <div className="tt-ps-nav-image-inner">
                   <img src={content.values["section-3-1"]} loading="lazy" alt={content.values["section-3-2"]} />
                 </div>
@@ -916,7 +916,7 @@ export default function Project1({ project, projectLinks }: ProjectPageProps) {
                   {content.values["section-3-4"]}
                 </div>
                 <h3 className="tt-ps-nav-title">
-                  <a href={projectLinks["project-9"] || "/#portfolio"} className="tt-link">
+                  <a href={(project.layoutContent ? relatedLinks?.previous : projectLinks["project-9"]) || "/#portfolio"} className="tt-link">
                     {content.values["section-3-5"]}
                   </a>
                 </h3>
@@ -933,7 +933,7 @@ export default function Project1({ project, projectLinks }: ProjectPageProps) {
           </div>
           <div className="tt-col-6">
             <div className="tt-ps-nav-item tt-ps-nav-next">
-              <a href={projectLinks["project-2"] || "/#portfolio"} className="tt-ps-nav-image" data-cursor={mediaLabel(content.values["extra-label-12"])}>
+              <a href={(project.layoutContent ? relatedLinks?.next : projectLinks["project-2"]) || "/#portfolio"} className="tt-ps-nav-image" data-cursor={mediaLabel(content.values["extra-label-12"])}>
                 <div className="tt-ps-nav-image-inner">
                   <img src={content.values["section-3-10"]} loading="lazy" alt={content.values["section-3-11"]} />
                 </div>
@@ -954,7 +954,7 @@ export default function Project1({ project, projectLinks }: ProjectPageProps) {
                   </div>
                 </div>
                 <h3 className="tt-ps-nav-title">
-                  <a href={projectLinks["project-2"] || "/#portfolio"} className="tt-link">
+                  <a href={(project.layoutContent ? relatedLinks?.next : projectLinks["project-2"]) || "/#portfolio"} className="tt-link">
                     {content.values["section-3-14"]}
                   </a>
                 </h3>

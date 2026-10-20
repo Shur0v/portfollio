@@ -48,6 +48,7 @@ No Nginx change is required for this feature: SSE sends `X-Accel-Buffering: no` 
 4. Test an image replacement, repeatable FAQ/service item, section visibility/order, and a case-study body correction. Check a second device and both display themes.
 5. Select the global page and confirm the Balanced/High-quality/Compact compression setting. New uploads return WebP automatically; existing assets are not bulk-recompressed.
 6. Confirm projects, drafts, messages, uploads, and the other two applications match their pre-upgrade state.
+7. Choose **New project**, select one of layouts 1–9, and confirm its empty form matches the selected design. Layout 5 has two rows of four upload placements. Save a draft, open **Preview saved project ↗**, and review the actual private page. Fill required visible image/video placements before publishing. Reopen the saved project and confirm its individual body and image placements persist; changing it must not overwrite another project using the same layout. See the upload workflow in the root README for shared defaults and optional section visibility.
 
 Updates are pushed after a database transaction commits, not after a fixed polling delay. Network and full-page animation initialization still take time. Filled contact forms deliberately wait before reloading; admin editors never auto-refresh over unsaved work. A disconnected stream has reconnect and polling fallback. Events expose only revision numbers.
 

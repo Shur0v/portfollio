@@ -26,6 +26,10 @@ test("all website pages use TSX with no legacy HTML, CSS stylesheets, or static 
     const code = await readFile(path.join(root, `components/projects/project-${variant}.tsx`), "utf8");
     assert.match(code, /export default function Project/u);
   }
+  for (const directory of ["assets", "public/assets"]) {
+    const runtime = await readFile(path.join(root, directory, "js/theme.js"), "utf8");
+    assert.doesNotMatch(runtime, /append\(markup\)|Begin demo code|\$\('<style>'\)/u);
+  }
   const stylesheet = postcss.parse(await readFile(path.join(root, "app/globals.css"), "utf8"));
   assert.ok(stylesheet.nodes.every(node => node.type === "atrule" && ["layer", "import", "config", "plugin", "source"].includes(node.name)));
 });

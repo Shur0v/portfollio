@@ -12,7 +12,7 @@ export async function PUT(request: Request, context: Context) {
   const previous = (await getProjects()).find(project => project.id === id);
   if (!previous) return NextResponse.json({ error: "Project not found." }, { status: 404 });
   try {
-    const project = validateProject(await readJson(request), previous);
+    const project = validateProject(await readJson(request, 512000), previous);
     await saveProject(project);
     return NextResponse.json({ project });
   } catch (error) {

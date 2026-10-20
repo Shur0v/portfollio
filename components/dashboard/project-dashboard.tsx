@@ -1,11 +1,14 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import type { Project } from "../../lib/project-types";
+import type { SitePageContent } from "../../lib/site-content-types";
+import { blankProjectLayout, projectLayout, projectLayouts, projectLayoutWarnings } from "../../lib/project-layouts";
+import { ProjectLayoutEditor } from "./project-layout-editor";
 
-const emptyProject = (): Project => ({ id: "", slug: "", title: "", category: "Digital", image: "", heroImage: "", description: "", client: "", year: String(new Date().getFullYear()), role: "", website: "", portrait: false, published: false, order: 10, template: 0, video: [], gallery: [] });
+const emptyProject = (defaults?: SitePageContent): Project => ({ id: "", slug: "", title: "", category: "Digital", image: "", heroImage: "", description: "", client: "", year: "", role: "", website: "", portrait: false, published: false, order: 10, template: 1, video: [], gallery: [], layoutContent: blankProjectLayout(1, defaults) });
 
-export function ProjectDashboard({ initialProjects, basePath }: { initialProjects: Project[]; basePath: string }) {
+export function ProjectDashboard({ initialProjects, basePath, layoutDefaults }: { initialProjects: Project[]; basePath: string; layoutDefaults: Record<string, SitePageContent> }) {
   const [projects, setProjects] = useState(initialProjects);
   const [draft, setDraft] = useState<Project | null>(null);
   const [busy, setBusy] = useState(false);
@@ -13,6 +16,14 @@ export function ProjectDashboard({ initialProjects, basePath }: { initialProject
   const [error, setError] = useState("");
   const [filter, setFilter] = useState("");
   const [dirty, setDirty] = useState(false);
+  const layoutContent = draft?.template ? draft.layoutContent || layoutDefaults[`project-${draft.template}`] || blankProjectLayout(draft.template) : undefined;
+  const missingMedia = draft ? projectLayoutWarnings(draft) : [];
+
+  useEffect(() => {
+    const warn = (event: BeforeUnloadEvent) => { if (dirty) { event.preventDefault(); event.returnValue = ""; } };
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [dirty]);
 
   function change<K extends keyof Project>(key: K, value: Project[K]) {
     setDirty(true);
@@ -21,10 +32,18 @@ export function ProjectDashboard({ initialProjects, basePath }: { initialProject
 
   function select(project: Project | null) {
     if (dirty && !window.confirm("Discard your unsaved changes?")) return;
-    setDraft(project ? { ...project, gallery: project.gallery || [] } : null);
+    setDraft(project ? structuredClone({ ...project, gallery: project.gallery || [] }) : null);
     setDirty(false);
     setError("");
     setMessage("");
+  }
+
+  function selectLayout(template: number) {
+    if (!draft || template === draft.template) return;
+    const hasContent = draft.template && layoutContent && projectLayout(draft.template).sections.some(section => section.fields.some(field => layoutContent.values[field.id])) || draft.template && layoutContent && projectLayout(draft.template).slots.some(slot => layoutContent.values[slot.id]);
+    if ((draft.id || hasContent) && !window.confirm("Switch layout? Layout-specific text and image placements will be cleared. Common project details and cover images are kept.")) return;
+    setDraft({ ...draft, template, layoutContent: template ? blankProjectLayout(template, layoutDefaults[`project-${template}`]) : undefined });
+    setDirty(true); setMessage(""); setError("");
   }
 
   async function save(event: FormEvent) {
@@ -42,8 +61,9 @@ export function ProjectDashboard({ initialProjects, basePath }: { initialProject
     finally { setBusy(false); }
   }
 
-  async function upload(files: FileList | null, target: "image" | "heroImage" | "gallery") {
+  async function upload(files: FileList | File[] | null, target: "image" | "heroImage" | "gallery" | { bindings: string[] }) {
     if (!files?.length) return;
+    if (Array.from(files).some(file => file.size > 10 * 1024 * 1024)) { setError("Each image must be 10 MB or smaller before compression."); return; }
     if (target === "gallery" && files.length + (draft?.gallery?.length || 0) > 20) {
       setError("A project can have up to 20 gallery images.");
       return;
@@ -58,8 +78,9 @@ export function ProjectDashboard({ initialProjects, basePath }: { initialProject
         if (!response.ok) throw new Error(result.error);
         uploaded.push(result.url);
       }
-      if (target === "gallery") change("gallery", [...(draft?.gallery || []), ...uploaded]);
-      else change(target, uploaded[0]);
+      if (typeof target === "object" && layoutContent) change("layoutContent", { ...layoutContent, values: { ...layoutContent.values, ...Object.fromEntries(target.bindings.map(id => [id, uploaded[0]])) } });
+      else if (target === "gallery") change("gallery", [...(draft?.gallery || []), ...uploaded]);
+      else if (typeof target === "string") change(target, uploaded[0]);
     } catch (error) { setError(error instanceof Error ? error.message : "Upload failed."); }
     finally { setBusy(false); }
   }
@@ -85,16 +106,16 @@ export function ProjectDashboard({ initialProjects, basePath }: { initialProject
   return <>
     <header className="tw:mb-8 tw:flex tw:flex-wrap tw:items-center tw:justify-between tw:gap-4">
       <div><p className="tw:text-lime-300 tw:text-sm">SHUROV / CONTENT STUDIO</p><h1 className="tw:mb-2 tw:text-3xl">Projects</h1><p className="tw:text-zinc-400">{projects.filter(project => project.published).length} published · {projects.filter(project => !project.published).length} drafts</p></div>
-      <div className="tw:flex tw:gap-3"><a className="button" href="/" target="_blank" rel="noreferrer">View portfolio ↗</a><button onClick={logout}>Sign out</button></div>
+      <div className="tw:flex tw:gap-3"><a className="button" href="/" target="_blank" rel="noreferrer">View portfolio ↗</a><button disabled={busy} onClick={logout}>Sign out</button></div>
     </header>
     <div className="tw:grid tw:gap-8 tw:lg:grid-cols-[300px_1fr]">
       <aside>
         <a className="button tw:mb-4 tw:w-full" href={`${basePath}/content`}>Edit website sections</a>
-        <button className="tw:w-full tw:mb-4" disabled={busy} onClick={() => select(emptyProject())}>+ New project</button>
+        <button className="tw:w-full tw:mb-4" disabled={busy} onClick={() => select({ ...emptyProject(layoutDefaults["project-1"]), order: Math.max(0, ...projects.map(project => project.order)) + 1 })}>+ New project</button>
         <label>Search projects<input type="search" value={filter} onChange={event => setFilter(event.target.value)} /></label>
         <div className="tw:mt-4 tw:space-y-3">
           {projects.filter(project => project.title.toLowerCase().includes(filter.toLowerCase())).map(project => <button key={project.id} disabled={busy} className="tw:w-full tw:text-left" aria-pressed={draft?.id === project.id} onClick={() => select(project)}>
-            <span className="tw:flex tw:items-center tw:gap-3"><img src={project.image} alt="" className="tw:h-12 tw:w-12 tw:rounded tw:object-cover" /><span><strong className="tw:block">{project.title}</strong><span className="tw:text-xs tw:text-zinc-400">{project.category} · {project.published ? "Published" : "Draft"}</span></span></span>
+            <span className="tw:flex tw:items-center tw:gap-3"><img src={project.image || "/assets/img/layout-placeholder-square.svg"} alt="" className="tw:h-12 tw:w-12 tw:rounded tw:object-cover" /><span><strong className="tw:block">{project.title}</strong><span className="tw:text-xs tw:text-zinc-400">{project.category} · {project.published ? "Published" : "Draft"}</span></span></span>
           </button>)}
         </div>
         <a className="button tw:mt-6" href={`${basePath}/messages`}>Contact messages</a>
@@ -106,6 +127,8 @@ export function ProjectDashboard({ initialProjects, basePath }: { initialProject
           <form onSubmit={save} className="tw:space-y-6">
             <h2>{draft.id ? "Edit project" : "New project"}</h2>
             <fieldset disabled={busy} className="tw:m-0 tw:space-y-6 tw:border-0 tw:p-0">
+              <label htmlFor="project-layout">Project layout</label><select id="project-layout" value={draft.template} onChange={event => selectLayout(Number(event.target.value))}><option value={0}>Simple project (legacy layout)</option>{projectLayouts.map(layout => <option key={layout.template} value={layout.template}>Layout {layout.template} — {layout.name}</option>)}</select>
+              <p className="tw:text-sm tw:text-zinc-400">Select the layout first. Its exact content sections and image placements appear below. Save a draft to preview the actual full page privately before publishing.</p>
               <div className="tw:grid tw:gap-5 tw:sm:grid-cols-2">
                 <label>Project title<input required maxLength={120} value={draft.title} onChange={event => { const value = event.target.value; const currentSlug = draft.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); change("title", value); if (!draft.id && (!draft.slug || draft.slug === currentSlug)) change("slug", value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")); }} /></label>
                 <label>URL slug<input required pattern="[a-z0-9]+(-[a-z0-9]+)*" maxLength={80} value={draft.slug} onChange={event => change("slug", event.target.value)} /><span className="tw:text-xs tw:text-zinc-400">/projects/{draft.slug || "your-project"}</span></label>
@@ -119,19 +142,23 @@ export function ProjectDashboard({ initialProjects, basePath }: { initialProject
               <div className="tw:grid tw:gap-5 tw:sm:grid-cols-2">
                 {([['image', 'Cover image'], ['heroImage', 'Hero image (optional)']] as const).map(([field, label]) => <label key={field}>{label}{draft[field] && <img src={draft[field]} alt={label} className="tw:mt-3 tw:h-40 tw:w-full tw:rounded-lg tw:object-cover" />}<input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={event => { void upload(event.target.files, field); event.target.value = ""; }} /><span className="tw:text-xs tw:text-zinc-400">JPG, PNG, WebP or GIF · up to 10 MB input · compressed to WebP (max 2 MB)</span></label>)}
               </div>
+              {draft.template > 0 && layoutContent && <ProjectLayoutEditor template={draft.template} content={layoutContent} onChange={content => change("layoutContent", content)} onUpload={(file, bindings) => { void upload([file], { bindings }); }} />}
               <label>Gallery images (up to 20)<input type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple onChange={event => { void upload(event.target.files, "gallery"); event.target.value = ""; }} /></label>
+              <p className="tw:text-xs tw:text-zinc-400">Extra gallery images are appended after the selected layout. Use the numbered placements above for images inside the original design.</p>
               <div className="tw:grid tw:gap-5 tw:sm:grid-cols-2">{(["video/mp4", "video/webm"] as const).map(type => <label key={type}>{type === "video/mp4" ? "MP4 video URL (optional)" : "WebM video URL (optional)"}<input value={draft.video.find(source => source.type === type)?.src || ""} onChange={event => change("video", [...draft.video.filter(source => source.type !== type), ...(event.target.value ? [{ type, src: event.target.value }] : [])])} /><span className="tw:text-xs tw:text-zinc-400">Existing /assets/vids/ path or HTTPS URL. Leave both empty to use an image cover.</span></label>)}</div>
               <div className="tw:grid tw:grid-cols-2 tw:gap-3 tw:sm:grid-cols-3">{draft.gallery?.map((image, index) => <div key={image + index}><img src={image} alt={`Gallery ${index + 1}`} className="tw:h-24 tw:w-full tw:object-cover" /><button type="button" onClick={() => change("gallery", draft.gallery!.filter((_, position) => index !== position))}>Remove image {index + 1}</button></div>)}</div>
-              {draft.template > 0 && <p className="tw:text-sm tw:text-zinc-400">The original case-study layout and media are preserved. Added gallery images appear below its existing content.</p>}
+              {!!missingMedia.length && <div role="note" className="tw:rounded-lg tw:bg-amber-950 tw:p-4 tw:text-sm tw:text-amber-200"><strong>{missingMedia.length} media placement{missingMedia.length === 1 ? "" : "s"} still need attention before publishing.</strong><ul>{missingMedia.map(warning => <li key={warning}>{warning}</li>)}</ul><p className="tw:mb-0">You can save an incomplete draft. Hide an optional section if it should not appear on this project.</p></div>}
               <label><input type="checkbox" checked={draft.portrait} onChange={event => change("portrait", event.target.checked)} /> Portrait cover layout</label>
               <label><input type="checkbox" checked={!!draft.repeatInGrid} onChange={event => change("repeatInGrid", event.target.checked)} /> Repeat card later in the grid (original layout)</label>
               <div className="tw:space-y-2"><p>Additional filters</p>{["Branding", "Digital", "Artistic"].filter(category => category !== draft.category).map(category => <label key={category}><input type="checkbox" checked={draft.additionalCategories?.includes(category) || false} onChange={event => change("additionalCategories", event.target.checked ? [...(draft.additionalCategories || []), category] : (draft.additionalCategories || []).filter(value => value !== category))} /> {category}</label>)}</div>
               <label><input type="checkbox" checked={draft.published} onChange={event => change("published", event.target.checked)} /> Published — visible on the portfolio</label>
               <div className="tw:flex tw:flex-wrap tw:gap-3">
                 <button type="submit">{busy ? "Saving…" : "Save project"}</button>
+                {draft.id && <button type="button" disabled={dirty} onClick={() => window.open(`${basePath}/preview/${draft.id}`, "_blank", "noopener,noreferrer")}>Preview saved project ↗</button>}
                 {draft.id && draft.published && <a className="button" target="_blank" rel="noreferrer" href={`/projects/${draft.slug}`}>View project ↗</a>}
                 {draft.id && <button type="button" onClick={() => remove(draft)}>Delete project</button>}
               </div>
+              {draft.id && dirty && <p className="tw:text-xs tw:text-zinc-400">Save your changes to enable the private full-page preview.</p>}
             </fieldset>
           </form>}
       </section>

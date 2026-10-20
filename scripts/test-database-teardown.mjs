@@ -13,4 +13,8 @@ export default async function teardown() {
   try { await access(path.join(directory, "postmaster.pid")); }
   catch (error) { if (error.code === "ENOENT") return; throw error; }
   await stopPostgres(directory);
+  try {
+    const failure = await readFile(path.join(storage, "server-stream-error"), "utf8");
+    throw new Error(failure);
+  } catch (error) { if (error.code !== "ENOENT") throw error; }
 }

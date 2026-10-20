@@ -101,6 +101,7 @@ export function SiteContentDashboard({ definitions, initialRecords, basePath, pr
       <div><p className="tw:text-sm tw:text-lime-300">SHUROV / CONTENT STUDIO</p><h1 className="tw:text-3xl">Website content</h1><p className="tw:text-zinc-400">Edit every existing text and image without changing the original layout.</p></div>
       <nav className="tw:flex tw:flex-wrap tw:gap-3"><a className="button" href={basePath}>Projects</a><a className="button" href={`${basePath}/messages`}>Inbox</a><a className="button" href={previewLinks[pageId] || "/"} target="_blank" rel="noreferrer">Preview ↗</a></nav>
     </header>
+    {pageId.startsWith("project-") && <p className="tw:rounded-lg tw:bg-zinc-800 tw:p-4 tw:text-sm">These are shared layout defaults. Use <a href={basePath}>Projects</a> to choose a layout and edit a project's independent body and image placements. Its saved body stays independent; interface labels and icons such as Client/Year/Role and cursor text remain shared here.</p>}
     <div className="tw:grid tw:gap-8 tw:lg:grid-cols-[260px_minmax(0,1fr)]">
       <aside className="tw:space-y-3"><label>Content page<select value={pageId} disabled={busy} onChange={event => select(event.target.value)}>{definitions.map(page => <option key={page.id} value={page.id}>{page.label}</option>)}</select></label>
         <label>Find a field<input type="search" value={filter} onChange={event => setFilter(event.target.value)} /></label>

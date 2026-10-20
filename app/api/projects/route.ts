@@ -7,7 +7,7 @@ import { readJson } from "../../../lib/request-body";
 export async function POST(request: Request) {
   if (!await authorizeMutation(request)) return NextResponse.json({ error: "Please sign in." }, { status: 401 });
   try {
-    const project = validateProject(await readJson(request));
+    const project = validateProject(await readJson(request, 512000));
     await saveProject(project);
     return NextResponse.json({ project }, { status: 201 });
   } catch (error) {

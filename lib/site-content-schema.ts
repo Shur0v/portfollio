@@ -24,10 +24,18 @@ function object(value: unknown): Record<string, unknown> {
   return value as Record<string, unknown>;
 }
 
-function fieldValue(field: SiteField, input: unknown) {
+type FieldOptions = { allowEmptyMedia?: boolean; allowHttpsVideo?: boolean };
+
+function fieldValue(field: SiteField, input: unknown, options: FieldOptions = {}) {
   if (typeof input !== "string" || input.length > (field.type === "textarea" ? 20000 : field.type === "text" ? 2000 : 2048) || input.includes("\u0000")) throw new Error(`Invalid ${field.label}.`);
   if (field.type === "choice" && !field.choices?.includes(input)) throw new Error(`Choose a valid ${field.label}.`);
   if (field.type === "image" || field.type === "video") {
+    if (!input && options.allowEmptyMedia) return input;
+    if (field.type === "video" && options.allowHttpsVideo && input.startsWith("https://")) {
+      const url = new URL(input);
+      if (url.username || url.password || /[\s<>\\]/.test(input)) throw new Error(`Invalid video: ${field.label}.`);
+      return input;
+    }
     const validLocal = /^\/(?:assets\/[a-zA-Z0-9_./-]+\.(?:jpe?g|png|webp|gif|ico|mp4|webm)|media\/[a-f0-9-]+\.webp|favicon\.ico)$/.test(input) && !input.includes("..");
     if (!validLocal) throw new Error(`Upload a valid file for ${field.label}.`);
   }
@@ -44,16 +52,16 @@ function fieldValue(field: SiteField, input: unknown) {
   return input;
 }
 
-function valuesFor(fields: SiteField[], input: unknown) {
+function valuesFor(fields: SiteField[], input: unknown, options: FieldOptions = {}) {
   const values = object(input);
   if (Object.keys(values).some(key => !fields.some(field => field.id === key))) throw new Error("Unknown content field.");
-  return Object.fromEntries(fields.map(field => [field.id, fieldValue(field, values[field.id])]));
+  return Object.fromEntries(fields.map(field => [field.id, fieldValue(field, values[field.id], options)]));
 }
 
-export function validateSitePage(id: string, input: unknown): SitePageContent {
+export function validateSitePage(id: string, input: unknown, options: FieldOptions = {}): SitePageContent {
   const definition = siteDefinition(id);
   const data = object(input);
-  const values = valuesFor(definition.sections.flatMap(section => section.fields), data.values);
+  const values = valuesFor(definition.sections.flatMap(section => section.fields), data.values, options);
   const collectionsInput = object(data.collections);
   if (Object.keys(collectionsInput).some(key => !definition.collections.some(collection => collection.id === key))) throw new Error("Unknown content collection.");
   const collections = Object.fromEntries(definition.collections.map(collection => {
